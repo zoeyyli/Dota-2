@@ -6,11 +6,11 @@ execute:
   echo: true
 
 book:
-  title: "YOUR PROJECT TITLE"
+  title: "Dota 2"
   author:
-    - AUTHOR1 (UNI1)
-    - AUTHOR2 (UNI2)
-  repo-url: https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME
+    - Ziyi Li (zl3360)
+    - Kaylen Ian Rivers (kir2117)
+  repo-url: https://github.com/zoeyyli/Dota-2
   date: today
   page-footer:
     right: |
