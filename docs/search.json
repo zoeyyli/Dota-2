@@ -7,17 +7,24 @@
     "text": "1 Introduction\nFor the final project, We chose to analyze the value of abilities in Dota 2’s “Ability Draft” (AD) game mode in order to provide a recommendation for ability selections. Firstly we would like to introduce the game. Dota 2, short for Defense of the Ancients 2, is a highly popular multiplayer online battle arena (MOBA) video game developed and published by Valve Corporation. There are two teams of five players for this game, with each team occupying and defending their territories on a map.\nThe following is the detailed context of this game. Every drafting phase begins by randomly selecting 12 out of the 124 characters or “heroes” in Dota 2. Each hero has four unique abilities associated with them, [QA, WA, EA, RA] for a generic hero A. Of the 12 selected heroes, one is assigned to each of the 10 players (assignment is unique), although the abilities of the unused heroes remain in the drafting pool. Then, in drafting order, each player selects one of the abilities in the pool to assign to their hero. Once all players have four abilities, the drafting phase ends and the players face-off in a five versus five Dota 2 match.\nGold and experience are finite resources in Dota 2 that must be divided amongst teammates. In practice, it is better for some players to receive the majority of the resources because different abilities/heroes require various resources to be maximally effective. In AD, these resources must be intuitively divided by the players on the same team to reach maximum effectiveness."
   },
   {
-    "objectID": "data.html#description",
-    "href": "data.html#description",
+    "objectID": "data.html#technical-description",
+    "href": "data.html#technical-description",
     "title": "2  Data",
-    "section": "2.1 Description",
-    "text": "2.1 Description\nThe data source we chose is OPENDOTA which is a third party Open source Dota 2 data platform, and it includes information from various aspects such as player profiles and statistics, Match Analysis, and hero and item statistics. The most useful function of this platform is the API Access that allows us to really access and use these online data.\nUsing the data provided by OPENDOTA, we can analyze the value of each of the abilities in a pool. For example, we could derive the win-rate associated with each ability from the results of a sample of matches. However, this only scratches the surface. There are approximately 16 quadrillion possible drafts, and 500 million ways to order the heroes in each draft. An ability’s value varies from draft to draft in a way that win-rate fails to capture.\nIn the data, we will have access to metrics like gold earned, experience earned, damage dealt, damage received, damage reduced, kills/death/assists in match, player rating, and much more. We could analyze how much an ability impacts a player’s survivability, damage, or wealth. Or we could discover which abilities perform well without gold, what two abilities have the highest average damage, and which ability is the most overvalued in the drafting phase."
+    "section": "2.1 Technical Description",
+    "text": "2.1 Technical Description\nThe data source we chose is OPENDOTA which is a third party Open source Dota 2 data platform, and it includes information from various aspects such as player profiles and statistics, Match Analysis, and hero and item statistics. OPENDOTA collects these data by leveraging the Dota 2 API provided by Valve.\nUsing the data provided by OPENDOTA, we can analyze the value of each of the abilities in a pool. For example, we could derive the win-rate associated with each ability from the results of a sample of matches. However, this only scratches the surface. There are approximately 16 quadrillion possible drafts, and 500 million ways to order the heroes in each draft. An ability’s value varies from draft to draft in a way that win-rate fails to capture.\nIn the JSON file, each variable has its associated meaning: - ‘match_id’: the unique identifier for one specific match in Dota 2 game - ‘account_id’: the account id of the specific player - ‘player_slot’: the slot in which the player is located - ‘ability_targets’, ‘ability_upgrades_arr’, ‘ability_uses’: description of player’s abilities and their usage - ‘actions’: details about player actions - ‘benchmarks’: A section providing benchmarks related to the player’s performance in the match, including gold earned per minute, experience per minute, and kills/death/assists in match etc\nIn the data, we will have access to metrics like gold earned, experience earned, damage dealt, damage received, damage reduced, kills/death/assists in match, player rating, and much more. We could analyze how much an ability impacts a player’s survivability, damage, or wealth. Or we could discover which abilities perform well without gold, what two abilities have the highest average damage, and which ability is the most overvalued in the drafting phase."
+  },
+  {
+    "objectID": "data.html#research-plan",
+    "href": "data.html#research-plan",
+    "title": "2  Data",
+    "section": "2.2 Research Plan",
+    "text": "2.2 Research Plan"
   },
   {
     "objectID": "data.html#missing-value-analysis",
     "href": "data.html#missing-value-analysis",
     "title": "2  Data",
-    "section": "2.2 Missing value analysis",
-    "text": "2.2 Missing value analysis"
+    "section": "2.3 Missing value analysis",
+    "text": "2.3 Missing value analysis"
   }
 ]

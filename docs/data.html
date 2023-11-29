@@ -142,8 +142,9 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#description" id="toc-description" class="nav-link active" data-scroll-target="#description"><span class="header-section-number">2.1</span> Description</a></li>
-  <li><a href="#missing-value-analysis" id="toc-missing-value-analysis" class="nav-link" data-scroll-target="#missing-value-analysis"><span class="header-section-number">2.2</span> Missing value analysis</a></li>
+  <li><a href="#technical-description" id="toc-technical-description" class="nav-link active" data-scroll-target="#technical-description"><span class="header-section-number">2.1</span> Technical Description</a></li>
+  <li><a href="#research-plan" id="toc-research-plan" class="nav-link" data-scroll-target="#research-plan"><span class="header-section-number">2.2</span> Research Plan</a></li>
+  <li><a href="#missing-value-analysis" id="toc-missing-value-analysis" class="nav-link" data-scroll-target="#missing-value-analysis"><span class="header-section-number">2.3</span> Missing value analysis</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/zoeyyli/Dota-2/edit/main/data.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/zoeyyli/Dota-2/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -167,14 +168,18 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="description" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="description"><span class="header-section-number">2.1</span> Description</h2>
-<p>The data source we chose is OPENDOTA which is a third party Open source Dota 2 data platform, and it includes information from various aspects such as player profiles and statistics, Match Analysis, and hero and item statistics. The most useful function of this platform is the API Access that allows us to really access and use these online data.</p>
+<section id="technical-description" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="technical-description"><span class="header-section-number">2.1</span> Technical Description</h2>
+<p>The data source we chose is OPENDOTA which is a third party Open source Dota 2 data platform, and it includes information from various aspects such as player profiles and statistics, Match Analysis, and hero and item statistics. OPENDOTA collects these data by leveraging the Dota 2 API provided by Valve.</p>
 <p>Using the data provided by OPENDOTA, we can analyze the value of each of the abilities in a pool. For example, we could derive the win-rate associated with each ability from the results of a sample of matches. However, this only scratches the surface. There are approximately 16 quadrillion possible drafts, and 500 million ways to order the heroes in each draft. An ability’s value varies from draft to draft in a way that win-rate fails to capture.</p>
+<p>In the JSON file, each variable has its associated meaning: - ‘match_id’: the unique identifier for one specific match in Dota 2 game - ‘account_id’: the account id of the specific player - ‘player_slot’: the slot in which the player is located - ‘ability_targets’, ‘ability_upgrades_arr’, ‘ability_uses’: description of player’s abilities and their usage - ‘actions’: details about player actions - ‘benchmarks’: A section providing benchmarks related to the player’s performance in the match, including gold earned per minute, experience per minute, and kills/death/assists in match etc</p>
 <p>In the data, we will have access to metrics like gold earned, experience earned, damage dealt, damage received, damage reduced, kills/death/assists in match, player rating, and much more. We could analyze how much an ability impacts a player’s survivability, damage, or wealth. Or we could discover which abilities perform well without gold, what two abilities have the highest average damage, and which ability is the most overvalued in the drafting phase.</p>
 </section>
-<section id="missing-value-analysis" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="missing-value-analysis"><span class="header-section-number">2.2</span> Missing value analysis</h2>
+<section id="research-plan" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="research-plan"><span class="header-section-number">2.2</span> Research Plan</h2>
+</section>
+<section id="missing-value-analysis" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="missing-value-analysis"><span class="header-section-number">2.3</span> Missing value analysis</h2>
 
 
 </section>
