@@ -1,12 +1,24 @@
 # Data
 
-## Description
+## Technical Description
 
-The data source we chose is OPENDOTA which is a third party Open source Dota 2 data platform, and it includes information from various aspects such as player profiles and statistics, Match Analysis, and hero and item statistics. The most useful function of this platform is the API Access that allows us to really access and use these online data. 
+The data source we chose is OPENDOTA which is a third party Open source Dota 2 data platform, and it includes information from various aspects such as player profiles and statistics, Match Analysis, and hero and item statistics. OPENDOTA collects these data by leveraging the Dota 2 API provided by Valve. 
 
 Using the data provided by OPENDOTA, we can analyze the value of each of the abilities in a pool. For example, we could derive the win-rate associated with each ability from the results of a sample of matches. However, this only scratches the surface. There are approximately 16 quadrillion possible drafts, and 500 million ways to order the heroes in each draft. An ability’s value varies from draft to draft in a way that win-rate fails to capture. 
 
+In the JSON file, each variable has its associated meaning:
+- ‘match_id’: the unique identifier for one specific match in Dota 2 game
+- ‘account_id’: the account id of the specific player
+- ‘player_slot’: the slot in which the player is located
+- ‘ability_targets’, ‘ability_upgrades_arr’, ‘ability_uses’: description of player’s abilities and their usage
+- ‘actions’: details about player actions
+- ‘benchmarks’: A section providing benchmarks related to the player's performance in the match, including gold earned per minute, experience per minute, and kills/death/assists in match etc
+
 In the data, we will have access to metrics like gold earned, experience earned, damage dealt, damage received, damage reduced, kills/death/assists in match, player rating, and much more. We could analyze how much an ability impacts a player’s survivability, damage, or wealth. Or we could discover which abilities perform well without gold, what two abilities have the highest average damage, and which ability is the most overvalued in the drafting phase. 
 
+
+
+
+## Research Plan
 
 ## Missing value analysis
