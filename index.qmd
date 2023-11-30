@@ -5,3 +5,15 @@ For the final project, We chose to analyze the value of abilities in Dota 2’s 
 The following is the detailed context of this game. Every drafting phase begins by randomly selecting 12 out of the 124 characters or “heroes” in Dota 2. Each hero has four unique abilities associated with them, [QA, WA, EA, RA] for a generic hero A. Of the 12 selected heroes, one is assigned to each of the 10 players (assignment is unique), although the abilities of the unused heroes remain in the drafting pool. Then, in drafting order, each player selects one of the abilities in the pool to assign to their hero. Once all players have four abilities, the drafting phase ends and the players face-off in a five versus five Dota 2 match. 
 
 Gold and experience are finite resources in Dota 2 that must be divided amongst teammates. In practice, it is better for some players to receive the majority of the resources because different abilities/heroes require various resources to be maximally effective. In AD, these resources must be intuitively divided by the players on the same team to reach maximum effectiveness. 
+
+Considering this, we formulate ten research questions to begin our data exploration:\
+- Which abilities have the highest average win rate, damage, kills, gold, experiences, etc., and are therefore the most valuable?\
+- What is the relationship between heroes and the abilities selected for them?\
+- What abilities are successful on the player with the most/fewest resources on a team?\
+- How are abilities distributed between teams in one-sided/even matches?\
+- Given a drafting pool and a hero, what ability should a player pick?\
+- What is the relationship between abilities and items?\
+- How do the in-game properties of heroes relate to abilities?\
+- What abilities soak large amounts of resources but fail to win the game?\
+- Do abilities or heroes function better on radiant or dire?\
+- What abilities, heroes, and items are responsible for dealing significant building damage?\

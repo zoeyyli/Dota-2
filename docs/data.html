@@ -170,20 +170,87 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="technical-description" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="technical-description"><span class="header-section-number">2.1</span> Technical Description</h2>
-<p>The data source we chose is OPENDOTA which is a third party Open source Dota 2 data platform, and it includes information from various aspects such as player profiles and statistics, Match Analysis, and hero and item statistics. OPENDOTA collects these data by leveraging the Dota 2 API provided by Valve.</p>
-<p>Using the data provided by OPENDOTA, we can analyze the value of each of the abilities in a pool. For example, we could derive the win-rate associated with each ability from the results of a sample of matches. However, this only scratches the surface. There are approximately 16 quadrillion possible drafts, and 500 million ways to order the heroes in each draft. An ability’s value varies from draft to draft in a way that win-rate fails to capture.</p>
-<p>In the JSON file, each variable has its associated meaning:<br>
-- ‘match_id’: the unique identifier for one specific match in Dota 2 game<br>
-- ‘account_id’: the account id of the specific player<br>
-- ‘player_slot’: the slot in which the player is located<br>
-- ‘ability_targets’, ‘ability_upgrades_arr’, ‘ability_uses’: description of player’s abilities and their usage<br>
-- ‘actions’: details about player actions<br>
-- ‘benchmarks’: A section providing benchmarks related to the player’s performance in the match, including gold earned per minute, experience per minute, and kills/death/assists in match etc<br>
+<p>The data source we chose is OPENDOTA, a third-party, open-source data platform that collects data from Dota 2 games. It includes information concerning player and match statistics by leveraging the Dota 2 API provided by Valve, the parent company of Dota 2. Over five billion matches are stored, and matches can be accessed through the API within hours of their completion.</p>
+<p>There are approximately 16 quadrillion possible drafts, and 500 million ways to order the heroes in any given AD game of Dota 2. This ensures that no AD match is exactly like another. In our analysis, we will evaluate the effectiveness of each ability across a small subset of these matches.</p>
+<p>We compiled our dataset by we querying the OPENDOTA API to obtain AD matches. Matches are accessed using a “match_id” parameter. The easiest way to obtain a match_id is to query the API with a ‘player_id’, which fetches the matches that player has played. We used a few additional parameters to ensure that the match was the AD game mode. Unfortunately, there was no way to query the API to receive a match_id independently of a player, so the 1600 matches in our dataset were accessed with a player_id 74152970.</p>
+<p>The response from the API upon requesting a particular match_id is a JSON object containing information pertaining to the match. For example, keys in the response indicate which team won, how long the game was, the total scores of both teams, the chat-log of the game, and the players present in the game. Each of the ten players are nested within the player data, and have their own keys such as their abilities, their number of kills, their total gold earned, and what items they owned.</p>
+<p>We chose to format our data so that each row represents one player in one match. The columns include the general data from the match as well as the individual player data. In the raw responses, we noticed dozens of fields consistently being left blank. However, most of the information we aimed to collect was preserved and we selected a total of 41 fields to preserve for each data entry, giving us plenty to work with.</p>
+<p>Some data, like the abilities and heroes, are stored as integers rather than names. As a result, we will have to transform these values according to a key that we have obtained from the API. Additionally, a player’s abilities are actually stored in the order in which the player leveled the abilities up. We will need to parse which abilities a player actually has from this list, and decide whether or not to preserve the leveling order. This also raises the edge case of a player having an ability but never leveling it, which—although possible—is incredibly rare.</p>
+<p>We performed our data compilation in Python and wrote the modified responses into an external CSV file, which we can import into R. Below is the breakdown of columns within the data:</p>
+<p>barracks_status_dire — integer: dire barracks wellbeing<br>
+barracks_status_radiant — integer: radiant barracks wellbeing<br>
+dire_score — integer: dire kill score<br>
+duration — integer in seconds: length of the game<br>
+first_blood_time — integer in seconds: time of the first kill<br>
+radiant_score — integer: radiant kill score<br>
+radiant_win — boolean: radiant victory<br>
+start_time — integer: absolute time the game started<br>
+tower_status_radiant — integer: radiant tower wellbeing<br>
+match_id — integer: the id of the match<br>
+player_slot — integer: 0-4: radiant player order, 128-132: dire player order<br>
+ability_upgrades_arr — array (integers): order in which player leveled abilities<br>
+account_id — integer: player id<br>
+assists — integer: number of kills aided in<br>
+deaths — integer: number of deaths<br>
+denies — integer: number of units denied<br>
+gold_per_min — integer: gold accumulated per minute<br>
+gold_spent — integer: gold spent<br>
+hero_damage — integer: damage dealt<br>
+hero_healing — integer: healing provided to teammates<br>
+hero_id — integer: id of the player’s hero<br>
+item_0 — integer: id of item 0<br>
+item_1 — integer: id of item 1<br>
+item_2 — integer: id of item 2<br>
+item_3 — integer: id of item 3<br>
+item_4 — integer: id of item 4<br>
+item_ — integer: id of item 5<br>
+item_neutral — integer: id of item neutral<br>
+kills — integer: number of kills<br>
+last_hits — integer: number of last hits&nbsp; level — integer: hero level at the end of the match<br>
+net_worth — integer: value of the hero at the end of the match<br>
+tower_damage — integer: damage dealt to enemy buildings<br>
+xp_per_min — integer: experience accumulated per minute<br>
+personaname — string, None: if available, the username of the player<br>
+isRadiant — boolean: indicates if the player is on radiant<br>
+win — boolean: indicates if the player won<br>
+kills_per_min — integer: kills acquired per minute<br>
+kda — float: kills / deaths<br>
+total_gold — integer: total gold accumulated<br>
+total_xp — integer: total experience accumulated<br>
 </p>
-<p>In the data, we will have access to metrics like gold earned, experience earned, damage dealt, damage received, damage reduced, kills/death/assists in match, player rating, and much more. We could analyze how much an ability impacts a player’s survivability, damage, or wealth. Or we could discover which abilities perform well without gold, what two abilities have the highest average damage, and which ability is the most overvalued in the drafting phase.</p>
 </section>
 <section id="research-plan" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="research-plan"><span class="header-section-number">2.2</span> Research Plan</h2>
+<p>To begin our research, we will need to do some final formatting of the data. This includes the formatting of the integer ids for several columns and the parsing of the ability_upgrades_arr column. Additionally, since most of our questions are directed at individual abilities, we will likely split each row into four separate entries, one for each of the abilities possessed by the player.</p>
+<p>Additionally, considering the differences in what abilities are present from one game to another, it may be helpful to add a column that includes the other abilities that were available in the pool, whether that ability was picked in the draft, and whether it was against or with the ability in the entry.</p>
+<p>Once the data is processed and cleaned, we can proceed to answering our research questions, as is outlined below:</p>
+<ol type="1">
+<li><p>Which abilities have the highest average win rate, damage, kills, gold, experiences, etc., and are therefore the most valuable?<br>
+We could make several bar charts plotting the average of the desired metric for an ability across the dataset. We could also create a scatterplot comparing the relationship between the two metrics and the ability.</p></li>
+<li><p>What is the relationship between heroes and the abilities selected for them?<br>
+We could look at individual hero-ability pairings while fixing the ability or the hero and display it in a bar chart. We could also calculate averages for all hero-ability pairings and search for the most and least successful, and plot those pairings. Since there are multiple ‘success’ metrics, we could also create scatterplots to plot hero-ability pairs across two metrics at a time, like gold and experience or kills and deaths.<br>
+Additionally, it may be interesting to see how common it is for particular heroes to pick an ability. We could plot a bar chart with the total number of times each hero picked an ability.</p></li>
+<li><p>What abilities are successful on the player with the most/fewest resources on a team?<br>
+We would need to filter the data to ascertain which heroes on a team were delegated large or small portions of the resources available to the team. Then, we could plot bar charts or scatter plots depicting the effectiveness or ineffectiveness of abilities based on allocated resources.</p></li>
+<li><p>How are abilities distributed between teams in one-sided/even matches?<br>
+We could filter our data for matches in which the duration was short, the kill-score was one-sided, or the difference in resources between teams was great. Then, we could track the prevalence of abilities on the winning or losing teams.</p></li>
+<li><p>Given a drafting pool and a hero, what ability should a player pick?<br>
+This is likely the most complicated of our research questions. First, we consider that that value of an ability is the sum of how much value it provides, and how much value it would provide to the enemy. To figure out which ability a player should pick in the draft, we could create facetted, two-by-five heat maps representing the players in the draft.<br>
+If a player won with the ability, we could add 1 to their tile, and subtract 1 if they lost, and facet for each ability in the drafting pool. Additionally, drafting pools that are more similar hold more predictive weight, but because there are fewer samples the more common draft pools become, the data becomes less reliable. To account for this, we could assign higher weights to more similar pools, or we could further facet the heat maps by the number of abilities held in common between the drafting pools.</p></li>
+</ol>
+<p>If we have time and would like to do additional data exploration, we could also answer the following questions:</p>
+<ol start="6" type="1">
+<li><p>What is the relationship between abilities and items?<br>
+We could perform some exploratory analysis on the ability-item pairings, similar to hero-ability pairings.</p></li>
+<li><p>How do the in-game properties of heroes relate to abilities?<br>
+In Dota 2, the heroes themselves have properties associated with them, like health, armor, and mana. The OPENDOTA API also includes this information, and we could augment our data with the base values of each hero to perform additional analysis and look for trends.</p></li>
+<li><p>What abilities soak large amounts of resources but fail to win the game?<br>
+We could filter for lost games and tally the abilities present on the rich members of the losing team.</p></li>
+<li><p>Do abilities or heroes function better on radiant or dire?<br>
+We could filter the data by which team the ability was present on and see if there are any trends. There are three abilities that have different functions depending on what team they are on, and we may see some difference in effectiveness for these abilities.</p></li>
+<li><p>What abilities, heroes, and items are responsible for dealing significant building damage?<br>
+We could take the building damage dealt by a player with an ability, and tally the total building damage of all of the abilities.&nbsp; Depending on the results of our exploration and analysis, we may choose to pursue these questions or others. But these ideas give us a place to start when exploring the data. We hope we will come across patterns that lead to further questions that we can’t anticipate!</p></li>
+</ol>
 </section>
 <section id="missing-value-analysis" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="missing-value-analysis"><span class="header-section-number">2.3</span> Missing value analysis</h2>
