@@ -1,1 +1,1 @@
-Description: Our Final Project is about analyzing the value of abilities in the “Ability Draft” (AD) game mode of Dota 2, a highly popular multiplayer online battle arena (MOBA) video game, in order to provide a recommendation for ability selections. 
+Our Final Project is about analyzing the value of abilities in the “Ability Draft” (AD) game mode of Dota 2, a highly popular multiplayer online battle arena video game, in order to provide a recommendation for ability selections. 
