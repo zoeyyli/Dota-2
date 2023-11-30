@@ -1,1 +1,1 @@
-Delete the content of this **README** and add a short description of your project in its place. If you're working locally, be sure to commit and push the changes to GitHub.
+Our Final Project is about analyzing the value of abilities in Dota 2’s “Ability Draft” (AD) game mode in order to provide a recommendation for ability selections.
