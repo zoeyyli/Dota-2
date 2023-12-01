@@ -112,7 +112,6 @@ Depending on the results of our exploration and analysis, we may choose to pursu
 #| fig-height: 10
 library(tidyverse)
 library(dplyr)
-#library(redav)
 
 addata_csv <- read_csv("addata.csv")
 
