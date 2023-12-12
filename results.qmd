@@ -23,7 +23,7 @@ library(ggplot2)
 library(forcats)
 ggplot(df, aes(x=reorder(ability,-Freq),y=Freq))+
   geom_col(color='blue', fill ='cornflowerblue', width=0.8)+
-  labs(title="Frequency count of Top 30 Abilities",x="Ability", y = "Count")+
+  labs(title="Frequency Count of Top 30 Abilities",x="Ability", y = "Count")+
   theme(axis.text.x = element_text(angle = 90, size = 8)) 
 ```
 ```{r}
@@ -35,7 +35,7 @@ Now the dataframe only contains data for 20 selected abilities.
 
 ## First Research Question
 
-Which abilities have the highest damage, kills, gold, experiences points earned, and kda statistic that is used to measure a player's performance, and are therefore the most valuable?
+- Which abilities have the highest damage, kills, gold, experiences points earned, and kda (a statistic that is used to measure a player's performance), and are therefore the most valuable?
 
 To answer the question, we decide to draw parallel coordinate plots which is useful when we want to get the abilities that top the charts in all five indicators. We make it interactive such that we can move axis around and we can filter for particular section which easier to see the top abilities. 
 
@@ -63,11 +63,28 @@ df_ability <- df_ability[df_ability$kills > 17 & df_ability$total_xp > 50000  & 
 df_ability
 ```
 
-From the interactive parallel coordinate plot, I select a specific region where these abilities have relatively high values across all five attributes. In total, I select 5 top abilities through these parallel coordinate plots, which are the following: 
+Answer to the question:\
+From the interactive parallel coordinate plot, I select a specific region where these abilities have relatively high values across all five attributes and I filter the dataset based on that. In total, I select 4 top abilities through these parallel coordinate plots, which are the following:\
 1. silencer_glaives_of_wisdom\
 2. omniknight_hammer_of_purity\
 3. kunkka_tidebringer\
 4. drow_ranger_marksmanship\
 
 ## Second Research Question
-What is the relationship between heroes and the abilities selected for them?
+
+Do abilities function better on radiant or dire?
+
+To answer the question, we decide to draw mosaic plot here because it can incorporate group size into account and can clearly show the relationship between multiple categorical variables, which are win, isRadient, and ability. 
+
+```{r}
+library(vcd)
+library(RColorBrewer)
+df_2 = dota2[dota2$ability == "silencer_glaives_of_wisdom" | dota2$ability == "omniknight_hammer_of_purity" | dota2$ability == "kunkka_tidebringer" | dota2$ability == "drow_ranger_marksmanship",]
+df_2[df_2 == "silencer_glaives_of_wisdom"] <- 's'
+df_2[df_2 == "omniknight_hammer_of_purity"] <- 'o'
+df_2[df_2 == "kunkka_tidebringer"] <- 'k'
+df_2[df_2 == "drow_ranger_marksmanship"] <- 'd'
+
+vcd::mosaic(win~isRadiant+ability, data = df_2, direction = c("v","v","h"), highlighting_fill = brewer.pal(4, 'Set3'),) 
+```
+From the above plot we can see that for the ability "kunkka_tidebringer", we have a higher winning proportion when it is not radient (it is dire), while for the other three abilities chosen, we have a higher winning possibility when it is radient, so the relationship between abilities and radiant/dire really depends on the context. In our case, we would choose radient. 
