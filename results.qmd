@@ -1,1 +1,70 @@
 # Results
+
+```{r}
+library(tidyverse)
+dota2 <- read.csv("addata.csv")
+dota2 |> drop_na()
+```
+
+## Select Ability Phase
+Before answering the research questions, we need to select the abilities we would like to analyze. There are over 500 abilities in total, which is an extremely large pool, so we decide to choose 10 of them with the most sufficient data given. Thus, firstly, we will draw the barplot showing the frequencies of all abilities, and our goal is to select the top 10 to do the future analysis. 
+
+```{r}
+df = as.data.frame(table(dota2$ability))
+names(df)[1] = 'ability'
+df$rank = rank(df$Freq)
+df <- df[order(df$rank,decreasing=TRUE),]
+df <- head(df,20)
+df
+```
+
+Frequencies of ALl abilities:
+```{r}
+library(ggplot2)
+library(forcats)
+ggplot(df, aes(x=reorder(ability,-Freq),y=Freq))+
+  geom_col(color='blue', fill ='cornflowerblue', width=0.8)+
+  labs(title="Frequency count of All Abilities",x="Ability", y = "Count")+
+  theme(axis.text.x = element_text(angle = 90, size = 8)) 
+```
+```{r}
+dota2 <- dota2[dota2$ability %in% df$ability,]
+dota2
+```
+
+Now the dataframe only contains data for 20 selected abilities. 
+
+## First Research Question
+
+Which abilities have the highest damage, kills, gold, experiences points earned, and kda statistic that is used to measure a player's performance, and are therefore the most valuable?
+
+To answer the question, we decide to draw parallel coordinate plots which is useful when we want to get the abilities that top the charts in all five indicators. We make it interactive such that we can move axis around and we can filter for particular section which easier to see the top abilities. 
+
+Parallel coordinate plot:
+
+```{r}
+library(GGally)
+library(dplyr)
+df <- dota2[,c("total_gold","kills","kda","tower_damage", "total_xp", "ability")]
+GGally::ggparcoord(data = df, columns = 1:5, alphaLines = .4,
+                   groupColumn = 6, title = "Parallel Coordinates Plot with Scaling")
+```
+
+```{r}
+library(parcoords)
+df <- dota2[,c("total_gold","kills","kda","tower_damage", "total_xp")]
+parcoords::parcoords(data = df, rownames = FALSE, brushMode = "1d-axes")
+```
+
+```{r}
+library(parcoords)
+df <- filter()
+parcoords::parcoords(data = df, rownames = FALSE, brushMode = "1d-axes")
+```
+
+## Second Research Question
+What is the relationship between heroes and the abilities selected for them?
+```{r}
+
+```
+
