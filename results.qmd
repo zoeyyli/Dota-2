@@ -7,29 +7,28 @@ dota2 |> drop_na()
 ```
 
 ## Select Ability Phase
-Before answering the research questions, we need to select the abilities we would like to analyze. There are over 500 abilities in total, which is an extremely large pool, so we decide to choose 10 of them with the most sufficient data given. Thus, firstly, we will draw the barplot showing the frequencies of all abilities, and our goal is to select the top 10 to do the future analysis. 
+Before answering the research questions, we need to select the abilities we would like to analyze. There are over 500 abilities in total, which is an extremely large pool, so we decide to choose 30 of them with the most sufficient data given. Thus, firstly, we will draw the barplot showing the frequencies of all abilities, and our goal is to select the top 30 to do the future analysis. 
 
 ```{r}
 df = as.data.frame(table(dota2$ability))
 names(df)[1] = 'ability'
 df$rank = rank(df$Freq)
 df <- df[order(df$rank,decreasing=TRUE),]
-df <- head(df,20)
+df <- head(df,30)
 df
 ```
 
-Frequencies of ALl abilities:
 ```{r}
 library(ggplot2)
 library(forcats)
 ggplot(df, aes(x=reorder(ability,-Freq),y=Freq))+
   geom_col(color='blue', fill ='cornflowerblue', width=0.8)+
-  labs(title="Frequency count of All Abilities",x="Ability", y = "Count")+
+  labs(title="Frequency count of Top 30 Abilities",x="Ability", y = "Count")+
   theme(axis.text.x = element_text(angle = 90, size = 8)) 
 ```
 ```{r}
 dota2 <- dota2[dota2$ability %in% df$ability,]
-dota2
+dota2 %>% distinct()
 ```
 
 Now the dataframe only contains data for 20 selected abilities. 
@@ -40,14 +39,12 @@ Which abilities have the highest damage, kills, gold, experiences points earned,
 
 To answer the question, we decide to draw parallel coordinate plots which is useful when we want to get the abilities that top the charts in all five indicators. We make it interactive such that we can move axis around and we can filter for particular section which easier to see the top abilities. 
 
-Parallel coordinate plot:
-
 ```{r}
 library(GGally)
 library(dplyr)
-df <- dota2[,c("total_gold","kills","kda","tower_damage", "total_xp", "ability")]
-GGally::ggparcoord(data = df, columns = 1:5, alphaLines = .4,
-                   groupColumn = 6, title = "Parallel Coordinates Plot with Scaling")
+df_ability <- dota2[,c("total_gold","kills","kda","tower_damage", "total_xp", "ability")]
+GGally::ggparcoord(data = df_ability, columns = 1:5, alphaLines = .4,
+                   groupColumn = 6, splineFactor = TRUE, title = "Parallel Coordinates Plot")
 ```
 
 ```{r}
@@ -56,15 +53,21 @@ df <- dota2[,c("total_gold","kills","kda","tower_damage", "total_xp")]
 parcoords::parcoords(data = df, rownames = FALSE, brushMode = "1d-axes")
 ```
 
+
 ```{r}
-library(parcoords)
-df <- filter()
+df <- df[df$kills > 17 & df$total_xp > 50000  & df$total_gold > 54000 & df$tower_damage > 7500,]
 parcoords::parcoords(data = df, rownames = FALSE, brushMode = "1d-axes")
 ```
+```{r}
+df_ability <- df_ability[df_ability$kills > 17 & df_ability$total_xp > 50000  & df_ability$total_gold > 54000 & df_ability$tower_damage > 7500,]
+df_ability
+```
+
+From the interactive parallel coordinate plot, I select a specific region where these abilities have relatively high values across all five attributes. In total, I select 5 top abilities through these parallel coordinate plots, which are the following: 
+1. silencer_glaives_of_wisdom\
+2. omniknight_hammer_of_purity\
+3. kunkka_tidebringer\
+4. drow_ranger_marksmanship\
 
 ## Second Research Question
 What is the relationship between heroes and the abilities selected for them?
-```{r}
-
-```
-
