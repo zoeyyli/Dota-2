@@ -4,6 +4,26 @@
 library(tidyverse)
 dota2 <- read.csv("addata.csv")
 dota2 <- drop_na(dota2)
+
+dota3 <- read.csv("addata.csv")
+dota3 = dota3[ , colSums(is.na(dota3)) == 0]
+
+dota3 <- dota3 %>%
+  mutate(
+    player_slot = case_when(
+      player_slot == 0 ~ 1,
+      player_slot == 1 ~ 3,
+      player_slot == 2 ~ 5,
+      player_slot == 3 ~ 7,
+      player_slot == 4 ~ 9,
+      player_slot == 128 ~ 2,
+      player_slot == 129 ~ 4,
+      player_slot == 130 ~ 6,
+      player_slot == 131 ~ 8,
+      player_slot == 132 ~ 10,
+    )
+  )
+
 ```
 
 ## Select Ability Phase
@@ -167,3 +187,74 @@ ggplot(dota2, aes(net_worth))+
   theme_grey(9)
 ```
 For the four abilities "omniknight_hammer_of_purity", "death_prophet_exorcism", "lina_fiery_soul", and "tusk_snowball", we can see all four of them are in reasonably fine economic standing, with "death_prophet_exorcism" having extremely high net worth compared to all abilities. This can help confirm that the four abilities selected have good economic values.
+
+
+## Good and Bad Abilities
+
+```{r}
+#| fig-width: 10
+#| fig-height: 10
+
+dfc = as.data.frame(table(dota3$ability))
+names(dfc)[1] = 'ability'
+dfc = filter(dfc, Freq > 29)
+
+dota3 <- dota3[dota3$ability %in% dfc$ability,]
+
+wldf <- dota3[,c("win", "ability")]
+
+wldf <- wldf %>%
+  filter(win == 1) %>%  # Consider only the rows where the round was won
+  group_by(ability) %>%
+  summarise(wins = n())
+
+wldf <- merge(wldf, dfc, by = "ability", all.x = TRUE)
+wldf$winrate <- wldf$wins / wldf$Freq
+wldf <- wldf[order(-wldf$winrate),]
+wlends <- rbind(head(wldf, 10), tail(wldf, 10))
+
+ggplot(wlends, aes(x=reorder(ability,winrate),y=winrate))+
+  geom_col(color='indianred', fill ='indianred', width=0.8)+
+  labs(title="The 10 Best and 10 Worst Abilities by Winrate", x="Ability", y = "Winrate")+
+  theme(
+    axis.text.x = element_text(angle = 90, size = 8),
+    plot.title = element_text(color = "black", face = "bold", hjust = 0.5)
+  ) +
+  coord_flip()
+
+```
+
+Before we discover which abilities are good or bad, we should make sure that we are working with a good sample size. To accomplish this, we will only consider abilities that appear in at least 30 matches. Then, we can calculate the total number of wins associated with each ability and determine the win rate by dividing by frequency. The results are plotted above. 
+
+We can see Slark's "Shadow Dance" topping the chart with a 77.78% winrate, while Tidehunter's "Anchor Smash" is at 22.58% on the bottom. 
+
+```{r}
+library(GGally)
+
+asdf = filter(dota3, ability == "tidehunter_anchor_smash")
+
+avg_values <- colMeans(dota3[, c('kills','deaths','duration','hero_damage','last_hits')])
+avg_values['win'] = 0.5
+
+asdf = asdf[,c('win', 'kills','deaths','duration','hero_damage','last_hits')]
+
+asdf <- rbind(asdf, as.data.frame(t(avg_values)))
+
+asdf <- asdf %>%
+  mutate_at(vars(-win), as.numeric)
+
+asdf <- asdf %>%
+  mutate_at(vars(win), as.character)
+
+
+
+colors <- c("indianred", "forestgreen", "navy")  
+pairs(
+  asdf[2:5],
+  upper.panel=NULL,
+  cex = 0.5,
+  col = colors[asdf$win]
+  )
+
+  
+```
