@@ -29,11 +29,9 @@ dota2 <- dota2[dota2$ability %in% df$ability,]
 
 The abilities are ordered based on their frequencies in the dataset, and the above graph only shows the abilities with top 30 frequencies. We can see for these top abilities, there are not much variation in their frequencies, all around 30 counts. Thus, we can ensure that there's sufficient data to analyze these abilities.
 
-## First Research Question
+## Which abilities have the highest damage, kills, gold, experiences points, and kda, and are therefore the most valuable?
 
-- Which abilities have the highest damage, kills, gold, experiences points earned, and kda (a statistic that is used to measure a player's performance), and are therefore the most valuable?
-
-To answer the question, we decide to draw parallel coordinate plots which is useful when we want to get the abilities that top the charts in all five indicators. 
+To answer the question, we decide to draw parallel coordinate plots which is useful when we want to get the abilities that top the charts in all five indicators. It's important to note that kda is a statistic that is used to measure a player's performance.
 
 ```{r}
 library(GGally)
@@ -88,9 +86,7 @@ vcd::mosaic(win~ability+isRadiant, data = df_2, direction = c("v","v","h"), high
 In this mosaic plot, label 'd' represents the ability "drow_ranger_marksmanship"; 'r' represents the ability "rattletrap_battery_assault"; 'o' represents the ability "omniknight_hammer_of_purity"; 's' represents the ability "sandking_caustic_finale". These abbreviations make the plot clearer to read by avoiding label overlaps.\
 From the above mosaic plot, we can see for the three abilities "omniknight_hammer_of_purity", "drow_ranger_marksmanship", and "rattletrap_battery_assault", they perform significantly better on radiant, while for the ability "sandking_caustic_finale", it performs better on dire (not radiant), so the choice of radiant/dire really depends on the abilities chosen. In our case, these four abilities generally function better on radiant. 
 
-## Third Research Question
-
-- What heroes are most commonly associated with the four good abilities?
+## What heroes are most commonly associated with the four good abilities?
 
 This question can be answered by drawing the separate barplots for each ability. When people are assigned hero, these heroes are designed with a specific role in mind, so they have tendence to select correlated abilities. From the barplots we can know what heroes are highly correlated to the selection of each ability among all four. 
 
@@ -147,9 +143,7 @@ ggarrange(a,b,c,d,common.legend = TRUE, legend = "bottom")
 From above barplots, we can see the hero Drow Ranger tends to be highly associated with the ability "drow_ranger_marksmanship"; the hero Lina is highest correlated to the ability "rattletrap_battery_assault"; the hero Omniknight is highest correlated to the ability "omniknight_hammer_of_purity"; the hero Gyrocoopter is highest correlated to the ability "sandking_caustic_finale". When people are randomly assigned these heroes, they are more likely to also select these four good abilities with a significant frequency difference compared to other heroes. 
 
 
-## Fourth Research Question
-
-- How many resources are consumed by these four abilities compared to the the other abilities?\
+## How many resources are consumed by these four abilities compared to the the other abilities?\
 
 We want to draw histograms of continuous variable net worth faceted by all 30 abilities to see the distribution of net resources of each player possessing good abilities compared to rest of the abilities. 
 
