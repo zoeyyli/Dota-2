@@ -2,69 +2,112 @@
 
 ```{r}
 dota2 <- read.csv("addata.csv")
+dota2 = dota2[ , colSums(is.na(dota2)) == 0]
+
+dota2 <- dota2 %>%
+  mutate(
+    player_slot = case_when(
+      player_slot == 0 ~ 1,
+      player_slot == 1 ~ 3,
+      player_slot == 2 ~ 5,
+      player_slot == 3 ~ 7,
+      player_slot == 4 ~ 9,
+      player_slot == 128 ~ 2,
+      player_slot == 129 ~ 4,
+      player_slot == 130 ~ 6,
+      player_slot == 131 ~ 8,
+      player_slot == 132 ~ 10,
+    )
+  )
+
+
 ```
 
-## Select Ability Phase
-Before answering the research questions, we need to select the abilities we would like to analyze. There are over 500 abilities in total, which is an extremely large pool, so we decide to choose 30 of them with the most sufficient data given. Thus, firstly, we will draw the barplot showing the frequencies of all abilities, and our goal is to select the top 30 to do the future analysis. 
+## Good and Bad Abilities
 
 ```{r}
-df = as.data.frame(table(dota2$ability))
-names(df)[1] = 'ability'
-df$rank = rank(df$Freq)
-df <- df[order(df$rank,decreasing=TRUE),]
-df <- head(df,30)
+#| fig-width: 10
+#| fig-height: 10
+
+dfc = as.data.frame(table(dota2$ability))
+names(dfc)[1] = 'ability'
+dfc = filter(dfc, Freq > 29)
+
+dota2 <- dota2[dota2$ability %in% dfc$ability,]
+
+wldf <- dota2[,c("win", "ability")]
+
+wldf <- wldf %>%
+  filter(win == 1) %>%  # Consider only the rows where the round was won
+  group_by(ability) %>%
+  summarise(wins = n())
+
+wldf <- merge(wldf, dfc, by = "ability", all.x = TRUE)
+wldf$winrate <- wldf$wins / wldf$Freq
+wldf <- wldf[order(-wldf$winrate),]
+wlends <- rbind(head(wldf, 10), tail(wldf, 10))
+
+ggplot(wlends, aes(x=reorder(ability,winrate),y=winrate))+
+  geom_col(color='indianred', fill ='indianred', width=0.8)+
+  labs(title="The 10 Best and 10 Worst Abilities by Winrate", x="Ability", y = "Winrate")+
+  theme(
+    axis.text.x = element_text(angle = 90, size = 8),
+    plot.title = element_text(color = "black", face = "bold", hjust = 0.5)
+  ) +
+  coord_flip()
 ```
 
-```{r}
-library(ggplot2)
-library(forcats)
-ggplot(df, aes(x=reorder(ability,-Freq),y=Freq))+
-  geom_col(color='blue', fill ='cornflowerblue', width=0.8)+
-  labs(title="Frequency Count of Top 30 Abilities",x="Ability", y = "Count")+
-  theme(axis.text.x = element_text(angle = 90, size = 8)) 
+There are over 500 abilities in total, which is an extremely large pool. In order to answer the research questions, we need to select the abilities we would like to analyze. Before we discover which abilities are good or bad, we should make sure that we are working with a good sample size. To accomplish this, we will only consider abilities that appear in at least 30 matches. Then, we can calculate the total number of wins associated with each ability and determine the win rate by dividing by frequency. The results are plotted above. 
 
+We can see Slark's "Shadow Dance" topping the chart with a 77.78% winrate, while Tidehunter's "Anchor Smash" is at 22.58% on the bottom. 
+
+
+```{r}
+df <- wlends
+df <- df[order(df$Freq,decreasing=TRUE),]
+df <- head(df,10)
+saved_for_fourth <- dota2[dota2$ability %in% df$ability,]
 dota2 <- dota2[dota2$ability %in% df$ability,]
 ```
 
-The abilities are ordered based on their frequencies in the dataset, and the above graph only shows the abilities with top 30 frequencies. We can see for these top abilities, there are not much variation in their frequencies, all around 30 counts. Thus, we can ensure that there's sufficient data to analyze these abilities.
+These are the 10 best abilities we would do further analysis on.
 
-## Which abilities have the highest damage, kills, gold, experiences points, and kda, and are therefore the most valuable?
+## Which abilities have the highest kills, gold, experiences points, and kda, and are therefore the most valuable?
 
-To answer the question, we decide to draw parallel coordinate plots which is useful when we want to get the abilities that top the charts in all five indicators. It's important to note that kda is a statistic that is used to measure a player's performance.
+To answer the question, we decide to draw parallel coordinate plots which is useful when we want to get the abilities that top the charts in all four indicators. It's important to note that kda is a statistic that is used to measure a player's performance.
 
 ```{r}
 library(GGally)
 library(dplyr)
-colnames(dota2)[35] <- "damage"
-df_ability <- dota2[,c("total_gold","kills","kda","damage", "total_xp", "ability")]
-GGally::ggparcoord(data = df_ability, columns = 1:5, alphaLines = .4, splineFactor = TRUE, title = "Parallel Coordinates Plot")
+df_ability <- dota2[,c("total_gold","kills","kda","total_xp", "ability")]
+GGally::ggparcoord(data = df_ability, columns = 1:4, alphaLines = .4, groupColumn = 5, splineFactor = TRUE, title = "Parallel Coordinates Plot")
 ```
 This is the parallel coordinate plot colored by abilities so that we can see the trend of lines of different colors. In general, the lines are compact at the start and at the end, while it's relatively widespread in the middle, with several lines having extremely large value of kda (potential outliers).
 
 ```{r}
 library(parcoords)
-df <- dota2[,c("total_gold","kills","kda","damage", "total_xp")]
+df <- dota2[,c("total_gold","kills","kda","total_xp")]
 parcoords::parcoords(data = df, rownames = FALSE, brushMode = "1d-axes")
 ```
 
-This is the interactive parallel coordinate plot for all 30 abilities. We make it interactive such that we can move axis around and we can filter for particular section which easier to see the top abilities. However, since the dataset is too large, the lines overlap, so we need to select specific region to interpret the plot. 
+This is the interactive parallel coordinate plot for all 10 abilities. We make it interactive such that we can move axis around and we can filter for particular section which easier to see the top abilities. However, since the dataset is too large, the lines overlap, so we need to select specific region to interpret the plot. 
 
 ```{r}
-df <- df[df$kills > 16 & df$total_xp > 36000  & df$total_gold > 32000 & df$kda > 10,]
+df <- df[df$kills > 16 & df$kda >= 10,]
 parcoords::parcoords(data = df, rownames = FALSE, brushMode = "1d-axes")
 ```
-From the interactive parallel coordinate plot, I select a specific region where these abilities have relatively high values across all five variables, damage, kills, gold, experiences points earned, and kda, and I filter the dataset based on that. However, it's important to notice that in the above plot there are only three lines because two abilities have exactly same all five attributes so the two lines overlap. 
+From the interactive parallel coordinate plot, I select a specific region where these abilities have relatively high values across all four variables, kills, gold, experiences points earned, and kda, and I filter the dataset based on that.
 
 ```{r}
-df_ability <- df_ability[df_ability$kills > 16 & df_ability$total_xp > 36000  & df_ability$total_gold > 32000 & df_ability$kda > 10 ,]
+df_ability <- df_ability[df_ability$kills > 16 & df_ability$kda >= 10,]
 df_ability
 ```
 
 In total, I select 4 top abilities through these parallel coordinate plots, which are the following:\
-1. omniknight_hammer_of_purity\
-2. sandking_caustic_finale\
-3. drow_ranger_marksmanship\
-4. rattletrap_battery_assault\
+1. omniknight_martyr\
+2. winter_wyvern_arctic_burn\
+3. slark_shadow_dance\
+4. necrolyte_reapers_scythe\
 
 ## Do these four good abilities function better on radiant or dire?
 
@@ -73,43 +116,44 @@ To answer the question, we decide to draw mosaic plot here because it can incorp
 ```{r}
 library(vcd)
 library(RColorBrewer)
-df_2 <- dota2[dota2$ability == "omniknight_hammer_of_purity" | dota2$ability == "sandking_caustic_finale" | dota2$ability == "drow_ranger_marksmanship" | dota2$ability == "rattletrap_battery_assault",]
-df_2[df_2 == "omniknight_hammer_of_purity"] <- 'o'
-df_2[df_2 == "sandking_caustic_finale"] <- 's'
-df_2[df_2 == "drow_ranger_marksmanship"] <- 'd'
-df_2[df_2 == "rattletrap_battery_assault"] <- 'r'
+dota2 <- read.csv("addata.csv")
+df_2 <- dota2[dota2$ability == "omniknight_martyr" | dota2$ability == "slark_shadow_dance" | dota2$ability == "winter_wyvern_arctic_burn" | dota2$ability == "necrolyte_reapers_scythe",]
+df_2[df_2 == "omniknight_martyr"] <- 'o'
+df_2[df_2 == "slark_shadow_dance"] <- 's'
+df_2[df_2 == "winter_wyvern_arctic_burn"] <- 'w'
+df_2[df_2 == "necrolyte_reapers_scythe"] <- 'n'
 
 vcd::mosaic(win~ability+isRadiant, data = df_2, direction = c("v","v","h"), highlighting_fill= matrix(c("lightblue","grey"),)) 
 ```
 
-In this mosaic plot, label 'd' represents the ability "drow_ranger_marksmanship"; 'r' represents the ability "rattletrap_battery_assault"; 'o' represents the ability "omniknight_hammer_of_purity"; 's' represents the ability "sandking_caustic_finale". These abbreviations make the plot clearer to read by avoiding label overlaps.\
-From the above mosaic plot, we can see for the three abilities "omniknight_hammer_of_purity", "drow_ranger_marksmanship", and "rattletrap_battery_assault", they perform significantly better on radiant, while for the ability "sandking_caustic_finale", it performs better on dire (not radiant), so the choice of radiant/dire really depends on the abilities chosen. In our case, these four abilities generally function better on radiant. 
+In this mosaic plot, label 'n' represents the ability "necrolyte_reapers_scythe"; 'o' represents the ability "omniknight_martyr"; 's' represents the ability "slark_shadow_dance"; 'w' represents the ability "winter_wyvern_arctic_burn". These abbreviations make the plot clearer to read by avoiding label overlaps.\
+From the above mosaic plot, we can see for the three abilities "omniknight_martyr", "slark_shadow_dance", and "winter_wyvern_arctic_burn", they perform significantly better on radiant, while for the ability "necrolyte_reapers_scythe", it performs better on dire (not radiant). In our case, these four abilities function much better on radiant. 
 
 ## What heroes are most commonly associated with the four good abilities?
 
 This question can be answered by drawing the separate barplots for each ability. When people are assigned hero, these heroes are designed with a specific role in mind, so they have tendence to select correlated abilities. From the barplots we can know what heroes are highly correlated to the selection of each ability among all four. 
 
 ```{r}
-df_d <- df_2[df_2$ability == "d",] 
-df_d = as.data.frame(table(df_d$hero))
-names(df_d)[1] = 'hero'
-df_d$rank = rank(df_d$Freq)
-df_d <- df_d[order(df_d$rank,decreasing=TRUE),]
+df_n <- df_2[df_2$ability == "n",] 
+df_n = as.data.frame(table(df_n$hero))
+names(df_n)[1] = 'hero'
+df_n$rank = rank(df_n$Freq)
+df_n <- df_n[order(df_n$rank,decreasing=TRUE),]
 
-a = ggplot(df_d, aes(x=reorder(hero,-Freq),y=Freq))+
+a = ggplot(df_n, aes(x=reorder(hero,-Freq),y=Freq))+
   geom_col(color='pink', fill ='lightpink', width=0.8)+
-  labs(title="Count of Hero Associated with 'd'",x="hero", y = "Count")+
+  labs(title="Count of Hero Associated with 'n'",x="hero", y = "Count")+
   theme(axis.text.x = element_text(angle = 90, hjust=1, size = 8)) 
 
-df_r <- df_2[df_2$ability == "r",] 
-df_r = as.data.frame(table(df_r$hero))
-names(df_r)[1] = 'hero'
-df_r$rank = rank(df_r$Freq)
-df_r <- df_r[order(df_r$rank,decreasing=TRUE),]
+df_s <- df_2[df_2$ability == "s",] 
+df_s = as.data.frame(table(df_s$hero))
+names(df_s)[1] = 'hero'
+df_s$rank = rank(df_s$Freq)
+df_s <- df_s[order(df_s$rank,decreasing=TRUE),]
 
-b = ggplot(df_r, aes(x=reorder(hero,-Freq),y=Freq))+
+b = ggplot(df_s, aes(x=reorder(hero,-Freq),y=Freq))+
   geom_col(color='pink', fill ='lightpink', width=0.8)+
-  labs(title="Count of Hero Associated with 'r'",x="hero", y = "Count")+
+  labs(title="Count of Hero Associated with 's'",x="hero", y = "Count")+
   theme(axis.text.x = element_text(angle = 90, hjust=1, size = 8)) 
 
 df_o <- df_2[df_2$ability == "o",] 
@@ -123,15 +167,15 @@ c = ggplot(df_o, aes(x=reorder(hero,-Freq),y=Freq))+
   labs(title="Count of Hero Associated with 'o'",x="hero", y = "Count")+
   theme(axis.text.x = element_text(angle = 90, hjust=1, size = 8)) 
 
-df_s <- df_2[df_2$ability == "s",] 
-df_s = as.data.frame(table(df_s$hero))
-names(df_s)[1] = 'hero'
-df_s$rank = rank(df_s$Freq)
-df_s <- df_s[order(df_s$rank,decreasing=TRUE),]
+df_w <- df_2[df_2$ability == "w",] 
+df_w = as.data.frame(table(df_w$hero))
+names(df_w)[1] = 'hero'
+df_w$rank = rank(df_w$Freq)
+df_w <- df_w[order(df_w$rank,decreasing=TRUE),]
 
-d = ggplot(df_s, aes(x=reorder(hero,-Freq),y=Freq))+
+d = ggplot(df_w, aes(x=reorder(hero,-Freq),y=Freq))+
   geom_col(color='pink', fill ='lightpink', width=0.8)+
-  labs(title="Count of Hero Associated with 's'",x="hero", y = "Count")+
+  labs(title="Count of Hero Associated with 'w'",x="hero", y = "Count")+
   theme(axis.text.x = element_text(angle = 90, hjust=1, size = 8)) 
 ```
 
@@ -139,22 +183,53 @@ d = ggplot(df_s, aes(x=reorder(hero,-Freq),y=Freq))+
 library("ggpubr")
 ggarrange(a,b,c,d,common.legend = TRUE, legend = "bottom")
 ```
-From above barplots, we can see the hero Drow Ranger tends to be highly associated with the ability "drow_ranger_marksmanship"; the hero Lina is highest correlated to the ability "rattletrap_battery_assault"; the hero Omniknight is highest correlated to the ability "omniknight_hammer_of_purity"; the hero Gyrocoopter is highest correlated to the ability "sandking_caustic_finale". When people are randomly assigned these heroes, they are more likely to also select these four good abilities with a significant frequency difference compared to other heroes. 
+From above barplots, we can see the hero Lifeastealer and Nechrophos tends to be highly associated with the ability "necrolyte_reapers_scythe"; the hero Slark is highest correlated to the ability "slark_shadow_dance"; the hero Omniknight is highest correlated to the ability "omniknight_martyr"; the hero Winter Wyvern is highest correlated to the ability "winter_wyvern_arctic_burn". When people are randomly assigned these heroes, they are more likely to also select these four good abilities with a significant frequency difference compared to other heroes. 
 
 
 ## How many resources are consumed by these four abilities compared to the the other abilities?
 
-We want to draw histograms of continuous variable net worth faceted by all 30 abilities to see the distribution of net resources of each player possessing good abilities compared to rest of the abilities. 
+We want to draw histograms of continuous variable net worth faceted by all 10 abilities to see the distribution of net resources of each player possessing good abilities compared to rest of the abilities. 
 
 ```{r}
-dota2[dota2 == "omniknight_hammer_of_purity"] <- 'o'
-dota2[dota2 == "sandking_caustic_finale"] <- 's'
-dota2[dota2 == "drow_ranger_marksmanship"] <- 'd'
-dota2[dota2 == "rattletrap_battery_assault"] <- 'r'
-ggplot(dota2, aes(net_worth))+
+saved_for_fourth[saved_for_fourth == "omniknight_martyr"] <- 'o'
+saved_for_fourth[saved_for_fourth == "slark_shadow_dance"] <- 's'
+saved_for_fourth[saved_for_fourth == "winter_wyvern_arctic_burn"] <- 'w'
+saved_for_fourth[saved_for_fourth == "necrolyte_reapers_scythe"] <- 'n'
+ggplot(saved_for_fourth, aes(net_worth))+
   geom_histogram(color = 'cornflowerblue', fill = 'lightblue', bins=15)+
   facet_wrap(~ability)+
   labs("Faceted Histogram of Net Worth")+
   theme_grey(9)
 ```
-From these histograms, we can see the three abilities "omniknight_hammer_of_purity", "drow_ranger_marksmanship", and "rattletrap_battery_assault" consume relative moderate amount of resources compared to the rest of the abilities, while the fourth ability "sandking_caustic_finale" spend high amount of resources with a widespread value range on net worth.
+From these histograms, we can see that the abilities "necrolyte_reapers_scythe" and "slark_shadow_dance" use relatively limited amount of resources, while the abilities "omniknight_martyr" and "winter_wyvern_arctic_burn" use relatively large amount of resources, meaning that there's cost selecting these abilities. 
+
+```{r}
+library(GGally)
+
+asdf = filter(dota2, ability == "tidehunter_anchor_smash")
+
+avg_values <- colMeans(dota2[, c('kills','deaths','duration','hero_damage','last_hits')])
+avg_values['win'] = 0.5
+
+asdf = asdf[,c('win', 'kills','deaths','duration','hero_damage','last_hits')]
+
+asdf <- rbind(asdf, as.data.frame(t(avg_values)))
+
+asdf <- asdf %>%
+  mutate_at(vars(-win), as.numeric)
+
+asdf <- asdf %>%
+  mutate_at(vars(win), as.character)
+
+
+
+colors <- c("indianred", "forestgreen", "navy")  
+pairs(
+  asdf[2:5],
+  upper.panel=NULL,
+  cex = 0.5,
+  col = colors[asdf$win]
+  )
+
+  
+```
