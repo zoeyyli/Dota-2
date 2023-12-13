@@ -29,9 +29,6 @@ dota2 <- dota2[dota2$ability %in% df$ability,]
 
 The abilities are ordered based on their frequencies in the dataset, and the above graph only shows the abilities with top 30 frequencies. We can see for these top abilities, there are not much variation in their frequencies, all around 30 counts. Thus, we can ensure that there's sufficient data to analyze these abilities.
 
-## Which abilities have the highest damage, kills, gold, experiences points earned, and kda (a statistic that is used to measure a player's performance), and are therefore the most valuable?
-
-To answer the question, we decide to draw parallel coordinate plots which is useful when we want to get the abilities that top the charts in all five indicators. 
 
 ```{r}
 library(GGally)
@@ -141,9 +138,6 @@ library("ggpubr")
 ggarrange(a,b,c,d,common.legend = TRUE, legend = "bottom")
 ```
 From above barplots, we can see the hero Drow Ranger tends to be highly associated with the ability "drow_ranger_marksmanship"; the hero Lina is highest correlated to the ability "rattletrap_battery_assault"; the hero Omniknight is highest correlated to the ability "omniknight_hammer_of_purity"; the hero Gyrocoopter is highest correlated to the ability "sandking_caustic_finale". When people are randomly assigned these heroes, they are more likely to also select these four good abilities with a significant frequency difference compared to other heroes. 
-
-
-## How many resources are consumed by these four abilities compared to the the other abilities?
 
 We want to draw histograms of continuous variable net worth faceted by all 30 abilities to see the distribution of net resources of each player possessing good abilities compared to rest of the abilities. 
 
