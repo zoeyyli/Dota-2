@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.433">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Ziyi Li (zl3360)">
 <meta name="author" content="Kaylen Ian Rivers (kir2117)">
-<meta name="dcterms.date" content="2023-11-30">
+<meta name="dcterms.date" content="2023-12-12">
 
 <title>Dota 2</title>
 <style>
@@ -171,7 +171,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 30, 2023</p>
+      <p class="date">December 12, 2023</p>
     </div>
   </div>
   
@@ -183,8 +183,8 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="introduction" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
-<p>For the final project, We chose to analyze the value of abilities in Dota 2’s “Ability Draft” (AD) game mode in order to provide a recommendation for ability selections. Firstly we would like to introduce the game. Dota 2, short for Defense of the Ancients 2, is a highly popular multiplayer online battle arena (MOBA) video game developed and published by Valve Corporation. There are two teams of five players for this game, with each team occupying and defending their territories on a map.</p>
-<p>The following is the detailed context of this game. Every drafting phase begins by randomly selecting 12 out of the 124 characters or “heroes” in Dota 2. Each hero has four unique abilities associated with them, [QA, WA, EA, RA] for a generic hero A. Of the 12 selected heroes, one is assigned to each of the 10 players (assignment is unique), although the abilities of the unused heroes remain in the drafting pool. Then, in drafting order, each player selects one of the abilities in the pool to assign to their hero. Once all players have four abilities, the drafting phase ends and the players face-off in a five versus five Dota 2 match.</p>
+<p>For the final project, We chose to analyze the value of abilities in Dota 2’s “Ability Draft” (AD) game mode in order to provide a thoughtful recommendation for ability selections. So what is Dota 2? Dota 2, short for Defense of the Ancients 2, is one of the most popular multiplayer online battle arena (MOBA) video game developed and published by Valve Corporation.</p>
+<p>Now we are going to discuss the detailed context of Dota 2. There are two teams of five players for this game, with each team occupying and defending their territories on a map. Every drafting phase begins by randomly selecting 12 out of the 124 characters or “heroes” in Dota 2. Each hero has four unique abilities associated with them, [QA, WA, EA, RA] for a generic hero A. Of the 12 selected heroes, one is assigned to each of the 10 players (assignment is unique), although the abilities of the unused heroes remain in the drafting pool. Then, in drafting order, each player selects one of the abilities in the pool to assign to their hero. Once all players have four abilities, the drafting phase ends and the players face-off in a five versus five Dota 2 match.</p>
 <p>Gold and experience are finite resources in Dota 2 that must be divided amongst teammates. In practice, it is better for some players to receive the majority of the resources because different abilities/heroes require various resources to be maximally effective. In AD, these resources must be intuitively divided by the players on the same team to reach maximum effectiveness.</p>
 <p>Considering this, we formulate ten research questions to begin our data exploration:<br>
 - Which abilities have the highest average win rate, damage, kills, gold, experiences, etc., and are therefore the most valuable?<br>
