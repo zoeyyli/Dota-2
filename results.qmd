@@ -39,7 +39,8 @@ To answer the question, we decide to draw parallel coordinate plots which is use
 ```{r}
 library(GGally)
 library(dplyr)
-df_ability <- dota2[,c("total_gold","kills","kda","tower_damage", "total_xp", "ability")]
+colnames(dota2)[35] <- "damage"
+df_ability <- dota2[,c("total_gold","kills","kda","damage", "total_xp", "ability")]
 GGally::ggparcoord(data = df_ability, columns = 1:5, alphaLines = .4,
                    groupColumn = 6, splineFactor = TRUE, title = "Parallel Coordinates Plot")
 ```
@@ -47,7 +48,7 @@ This is the parallel coordinate plot colored by abilities so that we can see the
 
 ```{r}
 library(parcoords)
-df <- dota2[,c("total_gold","kills","kda","tower_damage", "total_xp")]
+df <- dota2[,c("total_gold","kills","kda","damage", "total_xp")]
 parcoords::parcoords(data = df, rownames = FALSE, brushMode = "1d-axes")
 ```
 This is the interactive parallel coordinate plot for all 30 abilities. We make it interactive such that we can move axis around and we can filter for particular section which easier to see the top abilities. However, since the dataset is too large, the lines overlap, so we need to select specific region to interpret the plot. 
@@ -71,7 +72,7 @@ In total, I select 4 top abilities through these parallel coordinate plots, whic
 
 ## Second Research Question
 
-- Do good abilities function better on radiant or dire?
+- Do these four good abilities function better on radiant or dire?
 
 To answer the question, we decide to draw mosaic plot here because it can incorporate group size into account and can clearly show the relationship between multiple categorical variables, which are win (1 is win and 0 is lose), isRadient(True is radient and False is dire), and ability in our case.
 
@@ -92,7 +93,7 @@ From the above mosaic plot, we can see for abilities "omniknight_hammer_of_purit
 
 ## Third Research Question
 
-- What heroes are most commonly associated with good abilities?
+- What heroes are most commonly associated with the four good abilities?
 
 This question can be answered by drawing the separate barplots for each ability. When people are assigned hero, these heroes are designed with a specific role in mind, so they have tendence to select correlated abilities. From the barplots we can know what heroes are highly correlated to the selection of each ability among all four. 
 
@@ -148,3 +149,21 @@ ggarrange(a,b,c,d,common.legend = TRUE, legend = "bottom")
 ```
 From above barplots, we can see heroes Dawnbreaker, Grimstroke, Legion Commander, and Rubrick tend to be hgh associated with the ability "death_prophet_exorcism"; the hero Lina is highest correlated to the ability "lina_fiery_soul"; heroes Omniknight and Tiny is highest correlated to the ability "omniknight_hammer_of_purity"; heroes Tusk and Templar Assassin is highest correlated to the ability "tusk_snowball". When people are randomly assigned these heroes, they are more likely to also select these four good abilities.
 
+
+## Fourth Research Question
+
+- What's the economic standing of the player possessing above four abilities compared to other abilities?\
+
+We want to draw histograms of continuous variable net worth faceted by all 30 abilities to see the distribution of economic standing of the player possessing good abilities compared to rest of the abilities. 
+
+```{r}
+dota2[dota2 == "omniknight_hammer_of_purity"] <- 'o'
+dota2[dota2 == "death_prophet_exorcism"] <- 'd'
+dota2[dota2 == "lina_fiery_soul"] <- 'l'
+dota2[dota2 == "tusk_snowball"] <- 't'
+ggplot(dota2, aes(net_worth))+
+  geom_histogram(color = 'cornflowerblue', fill = 'lightblue', bins=15)+
+  facet_wrap(~ability)+
+  theme_grey(9)
+```
+For the four abilities "omniknight_hammer_of_purity", "death_prophet_exorcism", "lina_fiery_soul", and "tusk_snowball", we can see all four of them are in reasonably fine economic standing, with "death_prophet_exorcism" having extremely high net worth compared to all abilities. This can help confirm that the four abilities selected have good economic values.
