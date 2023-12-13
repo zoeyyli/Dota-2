@@ -40,10 +40,9 @@ library(GGally)
 library(dplyr)
 colnames(dota2)[35] <- "damage"
 df_ability <- dota2[,c("total_gold","kills","kda","damage", "total_xp", "ability")]
-GGally::ggparcoord(data = df_ability, columns = 1:5, alphaLines = .4,
-                   groupColumn = 6, splineFactor = TRUE, title = "Parallel Coordinates Plot")
+GGally::ggparcoord(data = df_ability, columns = 1:5, alphaLines = .4, splineFactor = TRUE, title = "Parallel Coordinates Plot")
 ```
-This is the parallel coordinate plot colored by abilities so that we can see the trend of lines of different colors. In general, the lines are compact at the start and at the end, while it's relatively widespread in the middle, with several lines having extremely large value of kda (potential outliers) that belong to the pink category "skywrath_mage_concussive_shot". 
+This is the parallel coordinate plot colored by abilities so that we can see the trend of lines of different colors. In general, the lines are compact at the start and at the end, while it's relatively widespread in the middle, with several lines having extremely large value of kda (potential outliers).
 
 ```{r}
 library(parcoords)
@@ -70,9 +69,7 @@ In total, I select 4 top abilities through these parallel coordinate plots, whic
 3. drow_ranger_marksmanship\
 4. rattletrap_battery_assault\
 
-## Second Research Question
-
-- Do these four good abilities function better on radiant or dire?
+## Do these four good abilities function better on radiant or dire?
 
 To answer the question, we decide to draw mosaic plot here because it can incorporate group size into account and can clearly show the relationship between multiple categorical variables, which are win (1 is win and 0 is lose), isRadient(True is radient and False is dire), and ability in our case.
 
@@ -85,7 +82,7 @@ df_2[df_2 == "sandking_caustic_finale"] <- 's'
 df_2[df_2 == "drow_ranger_marksmanship"] <- 'd'
 df_2[df_2 == "rattletrap_battery_assault"] <- 'r'
 
-vcd::mosaic(win~isRadiant+ability, data = df_2, direction = c("v","v","h"), highlighting_fill = brewer.pal(4, 'Set3'),) 
+vcd::mosaic(win~ability+isRadiant, data = df_2, direction = c("v","v","h"), highlighting_fill= matrix(c("lightblue","grey"),)) 
 ```
 
 In this mosaic plot, label 'd' represents the ability "drow_ranger_marksmanship"; 'r' represents the ability "rattletrap_battery_assault"; 'o' represents the ability "omniknight_hammer_of_purity"; 's' represents the ability "sandking_caustic_finale". These abbreviations make the plot clearer to read by avoiding label overlaps.\
@@ -107,18 +104,18 @@ df_d <- df_d[order(df_d$rank,decreasing=TRUE),]
 a = ggplot(df_d, aes(x=reorder(hero,-Freq),y=Freq))+
   geom_col(color='pink', fill ='lightpink', width=0.8)+
   labs(title="Count of Hero Associated with 'd'",x="hero", y = "Count")+
-  theme(axis.text.x = element_text(angle = 90, size = 8)) 
+  theme(axis.text.x = element_text(angle = 90, hjust=1, size = 8)) 
 
 df_r <- df_2[df_2$ability == "r",] 
 df_r = as.data.frame(table(df_r$hero))
 names(df_r)[1] = 'hero'
 df_r$rank = rank(df_r$Freq)
-df_r <- df_l[order(df_r$rank,decreasing=TRUE),]
+df_r <- df_r[order(df_r$rank,decreasing=TRUE),]
 
 b = ggplot(df_r, aes(x=reorder(hero,-Freq),y=Freq))+
   geom_col(color='pink', fill ='lightpink', width=0.8)+
   labs(title="Count of Hero Associated with 'r'",x="hero", y = "Count")+
-  theme(axis.text.x = element_text(angle = 90, size = 8)) 
+  theme(axis.text.x = element_text(angle = 90, hjust=1, size = 8)) 
 
 df_o <- df_2[df_2$ability == "o",] 
 df_o = as.data.frame(table(df_o$hero))
@@ -129,7 +126,7 @@ df_o <- df_o[order(df_o$rank,decreasing=TRUE),]
 c = ggplot(df_o, aes(x=reorder(hero,-Freq),y=Freq))+
   geom_col(color='pink', fill ='lightpink', width=0.8)+
   labs(title="Count of Hero Associated with 'o'",x="hero", y = "Count")+
-  theme(axis.text.x = element_text(angle = 90, size = 8)) 
+  theme(axis.text.x = element_text(angle = 90, hjust=1, size = 8)) 
 
 df_s <- df_2[df_2$ability == "s",] 
 df_s = as.data.frame(table(df_s$hero))
@@ -140,7 +137,7 @@ df_s <- df_s[order(df_s$rank,decreasing=TRUE),]
 d = ggplot(df_s, aes(x=reorder(hero,-Freq),y=Freq))+
   geom_col(color='pink', fill ='lightpink', width=0.8)+
   labs(title="Count of Hero Associated with 's'",x="hero", y = "Count")+
-  theme(axis.text.x = element_text(angle = 90, size = 8)) 
+  theme(axis.text.x = element_text(angle = 90, hjust=1, size = 8)) 
 ```
 
 ```{r}
