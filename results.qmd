@@ -164,6 +164,7 @@ dota2[dota2 == "tusk_snowball"] <- 't'
 ggplot(dota2, aes(net_worth))+
   geom_histogram(color = 'cornflowerblue', fill = 'lightblue', bins=15)+
   facet_wrap(~ability)+
+  labs("Faceted Histogram of Net Worth")
   theme_grey(9)
 ```
-For the four abilities "omniknight_hammer_of_purity", "death_prophet_exorcism", "lina_fiery_soul", and "tusk_snowball", we can see all four of them are in reasonably fine economic standing, with "death_prophet_exorcism" having extremely high net worth compared to all abilities. This can help confirm that the four abilities selected have good economic values.
+For the four abilities "omniknight_hammer_of_purity", "death_prophet_exorcism", "lina_fiery_soul", and "tusk_snowball", we can see all four of them are in reasonably fine economic standing, with "death_prophet_exorcism" having extremely high net worth compared to all abilities. This can help confirm that the four abilities selected have good economic standing. 
