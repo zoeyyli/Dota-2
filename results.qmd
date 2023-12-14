@@ -222,9 +222,9 @@ ggplot(saved_for_fourth, aes(net_worth))+
 
 From these histograms, we can see that the abilities "necrolyte_reapers_scythe" and "slark_shadow_dance" use relatively limited amount of resources, while the abilities "omniknight_martyr" and "winter_wyvern_arctic_burn" use relatively large amount of resources, meaning that there's higher cost selecting these abilities. 
 
-## Is there any inner correlation between the continuous variables we've studied above?
+## Is there any intercorrelation between the continuous variables we've studied above?
 
-We want to study inner correlation between eair pair of continuous variables by using the scatterplot matrix which is useful to show all correlations at once. We use the original dataset instead of the modified one above to avoid any issue of bias.
+We want to study intercorrelation between eair pair of continuous variables by using the scatterplot matrix which is useful to show all correlations at once. We use the original dataset instead of the modified one above to avoid any issue of bias.
 
 ```{r}
 dota2 = dota2[,c("total_gold","kills","kda","total_xp","net_worth")]
