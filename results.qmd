@@ -1,5 +1,18 @@
 # Results
 
+Before the data visualization, we will go over all the variables used below:
+
+- hero (categorical variable): a playable character that is controlled by each player\
+- ability (categorical variable): special skills or powers that each hero possesses, each hero has to choose four abilities\
+- kills (continuous variable): the number of enemy heroes that a player or team has successfully defeated during a match\
+- total_gold (continuous variable): the total amount of in-game currency (gold) that a player has accumulated during a match\
+- total_xp (continuous variable): experience points earned by a player in the match\
+- kda (continuous variable): kda stands for kills, Deaths, and Assists. It is a numerical representation of a player's performance in a match based on these three key statistics\
+- win (categorical variable): 1 represents winning the match and 0 represents loosing the match\
+- isRadiant (categorical variable): it's a boolean variable with True representing on Radiant and False\ representing on Dire which are two different factions in the match\
+- net_worth (categorical variable): total amount of resources used by the player during the match\
+
+
 ```{r}
 library(GGally)
 library(dplyr)
