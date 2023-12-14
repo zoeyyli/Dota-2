@@ -145,6 +145,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#technical-description" id="toc-technical-description" class="nav-link active" data-scroll-target="#technical-description"><span class="header-section-number">2.1</span> Technical Description</a></li>
   <li><a href="#research-plan" id="toc-research-plan" class="nav-link" data-scroll-target="#research-plan"><span class="header-section-number">2.2</span> Research Plan</a></li>
   <li><a href="#missing-value-analysis" id="toc-missing-value-analysis" class="nav-link" data-scroll-target="#missing-value-analysis"><span class="header-section-number">2.3</span> Missing value analysis</a></li>
+  <li><a href="#data-cleaning" id="toc-data-cleaning" class="nav-link" data-scroll-target="#data-cleaning"><span class="header-section-number">2.4</span> Data Cleaning</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/zoeyyli/Dota-2/edit/main/data.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/zoeyyli/Dota-2/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -267,10 +268,10 @@ We could take the building damage dealt by a player with an ability, and tally t
 ✖ dplyr::filter() masks stats::filter()
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors
-Rows: 12911 Columns: 41
+Rows: 6680 Columns: 41
 ── Column specification ────────────────────────────────────────────────────────
 Delimiter: ","
-chr  (3): ability, hero, personaname
+chr  (3): ability_upgrades_arr, hero_id, personaname
 dbl (36): barracks_status_dire, barracks_status_radiant, dire_score, duratio...
 lgl  (2): radiant_win, isRadiant
 
@@ -291,6 +292,34 @@ Adding another scale for y, which will replace the existing scale.</code></pre>
 <p>Some accounts are private and are therefore not stored in the system, which explains the missing data in the account_id and personaname columns.</p>
 <p>The kills_per_min column has a missing value if the player achieved no kills during the course of the match, so these values are actually 0.</p>
 <p>We are not sure what is responsible for the gaps in tower_damage, hero_healing, hero_damage, gold_spent, ability_upgrades_arr. It is particularly troublesome considering that the ability_upgrades_arr column is crucial for analysis. After querying the API for over 8 hours, we halted the process early, but it seems unlikely that that would have been responsible for the gaps. More likely, there are just gaps or errors in OPENDOTA’s data collection. Luckily, the same rows are missing multiple columns, leaving us with well over 3000 samples to begin analysis with.</p>
+</section>
+<section id="data-cleaning" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="data-cleaning"><span class="header-section-number">2.4</span> Data Cleaning</h2>
+<p>Once we had obtained the raw match data from the API, we needed to transform it into a more readable and workable form. All of the information we needed on abilities was stored in one column called “ability_upgrades_arr.” This column represented the abilities in the order they were upgraded by the player, but also included other information about leveling up that we did not need. In order to filter out information on the abilities, we obtained a an ability id key from the API and used it to convert the integers into strings. The name of a player’s hero was also stored as an integer, and we obtained a similar key to decode the values.</p>
+<p>Once we had curated the data frame, we wrote it into a CSV file. However, we realized that the data would be easier to work with if each row was split into four rows, one for each ability. We opened the CSV file back up, split the rows, and changed the column to the ‘ability’ column with one of the abilities. We also excluded any row that was missing ability data. This solved all of our concerns on missing data and left us with enough samples to perform exploratory analysis. We then wrote our data frame into a new CSV file and began our analysis.</p>
+<p>The file in which we performed this preprocessing can be accessed here: <a href="./scripts/opendota.ipynb">Link</a></p>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 12911 Columns: 41
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (3): ability, hero, personaname
+dbl (36): barracks_status_dire, barracks_status_radiant, dire_score, duratio...
+lgl  (2): radiant_win, isRadiant
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Coordinate system already present. Adding new coordinate system, which will
+replace the existing one.
+Scale for y is already present.
+Adding another scale for y, which will replace the existing scale.
+Scale for y is already present.
+Adding another scale for y, which will replace the existing scale.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="data_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" style="width:100.0%"></p>
+</div>
+</div>
 
 
 </section>
