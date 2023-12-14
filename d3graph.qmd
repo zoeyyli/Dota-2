@@ -14,7 +14,7 @@
 
 <div id="result"></div>
 <p id="dota" style="background-color: silver; color: white;">
-   Please select one ability below:</p>
+   Please select one ability below to see its win rate:</p>
    
 <input type="radio" name="ability" value="Yes" id="A"> slark shadow dance</input><br>
 <input type="radio" name="ability" value="Yes" id="C"> disruptor thunder strike</input><br>
