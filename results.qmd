@@ -1,21 +1,15 @@
 # Results
 
 ```{r}
+library(GGally)
+library(dplyr)
+library(parcoords)
+library(vcd)
+library(RColorBrewer)
+library(ggpubr)
+
 dota2 <- read.csv("addata.csv")
 dota2 = dota2[ , colSums(is.na(dota2)) == 0]
-
-library(tidyverse)
-dota2 <- mutate(dota2, player_slot = case_when(
-      player_slot == 0 ~ 1,
-      player_slot == 1 ~ 3,
-      player_slot == 2 ~ 5,
-      player_slot == 3 ~ 7,
-      player_slot == 4 ~ 9,
-      player_slot == 128 ~ 2,
-      player_slot == 129 ~ 4,
-      player_slot == 130 ~ 6,
-      player_slot == 131 ~ 8,
-      player_slot == 132 ~ 10))
 
 ```
 
@@ -27,7 +21,7 @@ dota2 <- mutate(dota2, player_slot = case_when(
 
 dfc = as.data.frame(table(dota2$ability))
 names(dfc)[1] = 'ability'
-dfc = filter(dfc, Freq > 29)
+dfc <- dfc[dfc$Freq > 29,]
 
 dota2 <- dota2[dota2$ability %in% dfc$ability,]
 
@@ -42,13 +36,8 @@ wldf <- merge(wldf, dfc, by = "ability", all.x = TRUE)
 wldf$winrate <- wldf$wins / wldf$Freq
 wldf <- wldf[order(-wldf$winrate),]
 wlends <- rbind(head(wldf, 10), tail(wldf, 10))
-```
 
-```{r}
-df <- wlends
-df <- df[order(df$Freq,decreasing=TRUE),]
-df <- head(df,10)
-ggplot(df, aes(x=reorder(ability,winrate),y=winrate))+
+ggplot(wlends, aes(x=reorder(ability,winrate),y=winrate))+
   geom_col(color='indianred', fill ='indianred', width=0.8)+
   labs(title="The 10 Best and 10 Worst Abilities by Winrate", x="Ability", y = "Winrate")+
   theme(
@@ -58,14 +47,40 @@ ggplot(df, aes(x=reorder(ability,winrate),y=winrate))+
   coord_flip()
 ```
 
-```{r}
-
-```
-
 There are over 500 abilities in total, which is an extremely large pool. In order to answer the research questions, we need to select the abilities we would like to analyze. Before we discover which abilities are good or bad, we should make sure that we are working with a good sample size. To accomplish this, we will only consider abilities that appear in at least 30 matches. Then, we can calculate the total number of wins associated with each ability and determine the win rate by dividing by frequency. The results are plotted above. 
 
 We can see Slark's "Shadow Dance" topping the chart with a 77.78% winrate, while Tidehunter's "Anchor Smash" is at 22.58% on the bottom. 
 
+```{r}
+#| fig-width: 10
+#| fig-height: 10
+
+dfh = as.data.frame(table(dota2$hero))
+names(dfh)[1] = 'hero'
+
+wlhdf <- dota2[,c("win", "hero")]
+
+wlhdf <- wlhdf %>%
+  filter(win == 1) %>%  # Consider only the rows where the round was won
+  group_by(hero) %>%
+  summarise(wins = n())
+
+wlhdf <- merge(wlhdf, dfh, by = "hero", all.x = TRUE)
+wlhdf$winrate <- wlhdf$wins / wlhdf$Freq
+wlhdf <- wlhdf[order(-wlhdf$winrate),]
+wlhends <- rbind(head(wlhdf, 10), tail(wlhdf, 10))
+
+ggplot(wlhends, aes(x=reorder(hero,winrate),y=winrate))+
+  geom_col(color='darkmagenta', fill ='darkmagenta', width=0.8)+
+  labs(title="The 10 Best and 10 Worst Heroes by Winrate", x="Ability", y = "Winrate")+
+  theme(
+    axis.text.x = element_text(angle = 90, size = 8),
+    plot.title = element_text(color = "black", face = "bold", hjust = 0.5)
+  ) +
+  coord_flip()
+
+```
+From this graph, we can see for what heroes tend to have higher win rate, which also affect the strength of abilites which will be further analyzed below. 
 
 ```{r}
 df <- wlends
@@ -75,22 +90,19 @@ saved_for_fourth <- dota2[dota2$ability %in% df$ability,]
 dota2 <- dota2[dota2$ability %in% df$ability,]
 ```
 
-These are the 10 best abilities we would do further analysis on.
-
 ## Which abilities have the highest kills, gold, experiences points, and kda, and are therefore the most valuable?
 
 To answer the question, we decide to draw parallel coordinate plots which is useful when we want to get the abilities that top the charts in all four indicators. It's important to note that kda is a statistic that is used to measure a player's performance.
 
 ```{r}
-library(GGally)
-library(dplyr)
+
 df_ability <- dota2[,c("total_gold","kills","kda","total_xp", "ability")]
 GGally::ggparcoord(data = df_ability, columns = 1:4, alphaLines = .4, groupColumn = 5, splineFactor = TRUE, title = "Parallel Coordinates Plot")
 ```
 This is the parallel coordinate plot colored by abilities so that we can see the trend of lines of different colors. In general, the data values are compact with only one line colored pink with extremely high value of kda that belongs to the ability "slark_shadow_dance"(might be outlier).
 
 ```{r}
-library(parcoords)
+
 df <- dota2[,c("total_gold","kills","kda","total_xp")]
 parcoords::parcoords(data = df, rownames = FALSE, brushMode = "1d-axes")
 ```
@@ -119,8 +131,7 @@ In total, I select 4 top abilities through these parallel coordinate plots, whic
 To answer the question, we decide to draw mosaic plot here because it can incorporate group size into account and can clearly show the relationship between multiple categorical variables, which are win (1 is win and 0 is lose), isRadient(True is radient and False is dire), and ability in our case.
 
 ```{r}
-library(vcd)
-library(RColorBrewer)
+
 dota2 <- read.csv("addata.csv")
 df_2 <- dota2[dota2$ability == "omniknight_martyr" | dota2$ability == "slark_shadow_dance" | dota2$ability == "winter_wyvern_arctic_burn" | dota2$ability == "necrolyte_reapers_scythe",]
 df_2[df_2 == "omniknight_martyr"] <- 'o'
@@ -185,7 +196,7 @@ d = ggplot(df_w, aes(x=reorder(hero,-Freq),y=Freq))+
 ```
 
 ```{r}
-library("ggpubr")
+
 ggarrange(a,b,c,d,common.legend = TRUE, legend = "bottom")
 ```
 
@@ -211,9 +222,6 @@ ggplot(saved_for_fourth, aes(net_worth))+
 From these histograms, we can see that the abilities "necrolyte_reapers_scythe" and "slark_shadow_dance" use relatively limited amount of resources, while the abilities "omniknight_martyr" and "winter_wyvern_arctic_burn" use relatively large amount of resources, meaning that there's higher cost selecting these abilities. 
 
 ```{r}
-library(GGally)
-library(dplyr)
-
 asdf = filter(dota2, ability == "tidehunter_anchor_smash")
 
 avg_values <- colMeans(dota2[, c('kills','deaths','duration','hero_damage','last_hits')])
