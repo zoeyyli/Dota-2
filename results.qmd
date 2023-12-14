@@ -12,7 +12,6 @@ Before the data visualization, we will go over all the variables used below:
 - isRadiant (categorical variable): it's a boolean variable with True representing on Radiant and False\ representing on Dire which are two different factions in the match\
 - net_worth (categorical variable): total amount of resources used by the player during the match\
 
-
 ```{r}
 library(GGally)
 library(dplyr)
