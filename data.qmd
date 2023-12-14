@@ -232,6 +232,7 @@ Once we had obtained the raw match data from the API, we needed to transform it 
 
 Once we had curated the data frame, we wrote it into a CSV file. However, we realized that the data would be easier to work with if each row was split into four rows, one for each ability. We opened the CSV file back up, split the rows, and changed the column to the ‘ability’ column with one of the abilities. We also excluded any row that was missing ability data. This solved all of our concerns on missing data and left us with enough samples to perform exploratory analysis. We then wrote our data frame into a new CSV file and began our analysis.
 
+The file in which we performed this preprocessing can be accessed here: [Link](/scripts/opendota.ipynb)
 
 ```{r}
 #| out-width: 100%
