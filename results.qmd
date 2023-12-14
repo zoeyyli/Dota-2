@@ -10,7 +10,7 @@ Before the data visualization, we will go over all the variables used below:
 - kda (continuous variable): kda stands for kills, Deaths, and Assists. It is a numerical representation of a player's performance in a match based on these three key statistics\
 - win (categorical variable): 1 represents winning the match and 0 represents loosing the match\
 - isRadiant (categorical variable): it's a boolean variable with True representing on Radiant and False\ representing on Dire which are two different factions in the match\
-- net_worth (categorical variable): total amount of resources used by the player during the match\
+- net_worth (continuous variable): total amount of resources used by the player during the match\
 
 ```{r}
 library(GGally)
