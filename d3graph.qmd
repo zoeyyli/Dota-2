@@ -28,6 +28,23 @@
 <input type="radio" name="ability" value="Yes" id="B"> beastmaster wild axes</input><br>
 
 <div id="plot"></div>
+<p></p>
+
+<p id="dota" style="background-color: silver; color: white;">
+   Please select one hero below to see its win rate:</p>
+
+<input type="radio" name="ability" value="Yes" id="1"> Mars</input><br>
+<input type="radio" name="ability" value="Yes" id="3"> Elder Titan</input><br>
+<input type="radio" name="ability" value="Yes" id="5"> Batrider</input><br>
+<input type="radio" name="ability" value="Yes" id="7"> Slark</input><br>
+<input type="radio" name="ability" value="Yes" id="4"> Lone Druid</input><br>
+<input type="radio" name="ability" value="Yes" id="8"> Zeus</input><br>
+<input type="radio" name="ability" value="Yes" id="9"> Broodmother</input><br>
+<input type="radio" name="ability" value="Yes" id="6"> Phantom Assassin</input><br>
+<input type="radio" name="ability" value="Yes" id="10"> Undying</input><br>
+<input type="radio" name="ability" value="Yes" id="2"> Bane</input><br>
+
+<div id="plot_2"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="scripts/myscript.js"></script>

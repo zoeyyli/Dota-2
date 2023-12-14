@@ -74,7 +74,7 @@
     "href": "d3graph.html",
     "title": "4  Interactive graph",
     "section": "",
-    "text": "Do you know the game Dota2?\n\nYes No\n\n\n\n\nPlease select one ability below:\n\n slark shadow dance  disruptor thunder strike  necrolyte_reapers_scythe  phoenix_icarus_dive  sniper_assassinate  earthshaker aftershock  windrunner_windrun  omniknight_martyr  tidehunter_anchor_smash  beastmaster wild axes"
+    "text": "Do you know the game Dota2?\n\nYes No\n\n\n\n\nPlease select one ability below to see its win rate:\n\n slark shadow dance  disruptor thunder strike  necrolyte_reapers_scythe  phoenix_icarus_dive  sniper_assassinate  earthshaker aftershock  windrunner_windrun  omniknight_martyr  tidehunter_anchor_smash  beastmaster wild axes\n\n\n\n\n\n\nPlease select one hero below to see its win rate:\n\n Mars  Elder Titan  Batrider  Slark  Lone Druid  Zeus  Broodmother  Phantom Assassin  Undying  Bane"
   },
   {
     "objectID": "conclusion.html",
