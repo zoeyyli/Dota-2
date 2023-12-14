@@ -2,24 +2,26 @@
 
 Before the data visualization, we will go over all the variables used below:
 
-- hero (categorical variable): a playable character that is controlled by each player\
-- ability (categorical variable): special skills or powers that each hero possesses, each hero has to choose four abilities\
-- kills (continuous variable): the number of enemy heroes that a player or team has successfully defeated during a match\
-- total_gold (continuous variable): the total amount of in-game currency (gold) that a player has accumulated during a match\
-- total_xp (continuous variable): experience points earned by a player in the match\
-- kda (continuous variable): kda stands for kills, Deaths, and Assists. It is a numerical representation of a player's performance in a match based on these three key statistics\
-- win (categorical variable): 1 represents winning the match and 0 represents loosing the match\
-- isRadiant (categorical variable): it's a boolean variable with True representing on Radiant and False\ representing on Dire which are two different factions in the match\
-- net_worth (continuous variable): total amount of resources used by the player during the match\
-- deaths (continuous variable): he number of times a hero has been killed during a match\
-- duration (continuous variable): the length of time that an ability remains active or persists\
-- hero_damage (continuous variable): the amount of damage dealt specifically to enemy heroes by the player\
-- last_hits (continuous variable): the number of enemy creeps that a player's hero delivers the killing blow to
+categorical variables:\
+- hero: a playable character that is controlled by each player\
+- ability: special skills or powers that each hero possesses, each hero has to choose four abilities\
+- win: 1 represents winning the match and 0 represents loosing the match\
+- isRadiant: it's a boolean variable with True representing on Radiant and False representing on Dire which are two different factions in the match\
+
+continuous variables:\
+- kills: the number of enemy heroes that a player or team has successfully defeated during a match\
+- total_gold: the total amount of in-game currency (gold) that a player has accumulated during a match\
+- total_xp: experience points earned by a player in the match\
+- kda: kda stands for kills, Deaths, and Assists. It is a numerical representation of a player's performance in a match based on these three key statistics\
+- net_worth: total amount of resources used by the player during the match\
+- deaths: he number of times a hero has been killed during a match\
+- duration: the length of time that an ability remains active or persists\
+- hero_damage: the amount of damage dealt specifically to enemy heroes by the player\
+- last_hits: the number of enemy creeps that a player's hero delivers the killing blow to\
 
 ```{r, echo=FALSE, results=FALSE, message=FALSE}
 library(GGally)
 library(dplyr)
-library(parcoords)
 library(vcd)
 library(RColorBrewer)
 library(ggpubr)
@@ -29,7 +31,7 @@ dota2 = dota2[ , colSums(is.na(dota2)) == 0]
 
 ```
 
-## Good and Bad Abilities
+## Good and Bad Abilities/Heroes
 
 ```{r, echo=FALSE, results=FALSE, message=FALSE}
 #| fig-width: 10
@@ -118,33 +120,35 @@ dota2 <- dota2[dota2$ability %in% df$ability,]
 
 ## Which abilities have the highest kills, gold, experiences points, and kda, and are therefore the most valuable?
 
-To answer the question, we decide to draw parallel coordinate plots which is useful when we want to get the abilities that top the charts in all four indicators. It's important to note that kda is a statistic that is used to measure a player's performance.
+To answer the question, we decide to draw parallel coordinate plots.By leveraging parallel coordinate plots, we aim to discern abilities that consistently stand out across all four indicators listed in the question, providing a comprehensive perspective on their overall effectiveness.
 
 ```{r, echo=FALSE, results=FALSE, message=FALSE}
 df_ability <- dota2[,c("total_gold","kills","kda","total_xp", "ability")]
 GGally::ggparcoord(data = df_ability, columns = 1:4, alphaLines = .4, groupColumn = 5, splineFactor = TRUE, title = "Parallel Coordinates Plot")
 ```
-This is the parallel coordinate plot colored by abilities so that we can see the trend of lines of different colors. In general, the data values are compact with only one line colored pink with extremely high value of kda that belongs to the ability "slark_shadow_dance"(might be outlier).
+This is the parallel coordinate plot colored by abilities so that we can see the trend of lines of different colors. In general, the data values are compact with only one line colored pink with extremely high value of kda that belongs to the ability "slark_shadow_dance" (potential outlier).However, it's hard to tell what abilities are high across all four attributes. To address this limitation and provide a more interactive and detailed exploration, we introduced an interactive version of the parallel coordinate plot, as illustrated below. 
 
-```{r, echo=FALSE, results=FALSE, message=FALSE}
+```{r}
+library(parcoords)
 df <- dota2[,c("total_gold","kills","kda","total_xp")]
 parcoords::parcoords(data = df, rownames = FALSE, brushMode = "1d-axes")
 ```
 
-This is the interactive parallel coordinate plot for all 10 abilities. We make it interactive such that we can move axis around and we can filter for particular section which easier to see the top abilities. However, since the dataset is too large, the lines overlap, so we need to select specific region to interpret the plot. 
+This is the interactive parallel coordinate plot for all 10 best abilities. It facilitates a dynamic exploration of the data. We make it interactive such that we can move axis around and we can filter for particular section which easier to see the top abilities. However, since the dataset is too large, the lines overlap, so we need to select specific region to interpret the plot. 
 
-```{r, echo=FALSE, results=FALSE, message=FALSE}
+```{r}
 df <- df[df$kills > 16 & df$kda >= 10,]
 parcoords::parcoords(data = df, rownames = FALSE, brushMode = "1d-axes")
 ```
-From the interactive parallel coordinate plot, I select a specific region where these abilities have relatively high values across all four variables, kills, gold, experiences points earned, and kda, and I filter the dataset based on that.
 
-```{r, echo=FALSE, results=FALSE, message=FALSE}
+In the interactive parallel coordinate plot, a specific region has been selected where certain abilities exhibit relatively high values across all four variables: kills, gold, experience points earned, and kda. The abilities contained in this region are provided in the dataframe below. 
+
+```{r}
 df_ability <- df_ability[df_ability$kills > 16 & df_ability$kda >= 10,]
 df_ability
 ```
 
-From the data frame we can see two of the rows are from same ability. In total, I select 4 top abilities through these parallel coordinate plots, which are the following:\
+From the data frame we can see two of the rows are from same ability. In total, we select 4 top abilities through these parallel coordinate plots, which are the following:\
 1. omniknight_martyr\
 2. winter_wyvern_arctic_burn\
 3. slark_shadow_dance\
@@ -152,7 +156,7 @@ From the data frame we can see two of the rows are from same ability. In total, 
 
 ## Do these four good abilities function better on radiant or dire?
 
-To answer the question, we decide to draw mosaic plot here because it can incorporate group size into account and can clearly show the relationship between multiple categorical variables, which are win (1 is win and 0 is lose), isRadient(True is radient and False is dire), and ability in our case.
+To answer the question, we decide to draw mosaic plot here because it can incorporate group size into account and offers a clear depiction of the relationships between multiple categorical variables, which are win (1 is win and 0 is lose), isRadient(True is radient and False is dire), and ability in our case.
 
 ```{r, echo=FALSE, results=FALSE, message=FALSE}
 dota2 <- read.csv("addata.csv")
@@ -166,11 +170,11 @@ vcd::mosaic(win~ability+isRadiant, data = df_2, direction = c("v","v","h"), main
 ```
 
 In this mosaic plot, label 'n' represents the ability "necrolyte_reapers_scythe"; 'o' represents the ability "omniknight_martyr"; 's' represents the ability "slark_shadow_dance"; 'w' represents the ability "winter_wyvern_arctic_burn". These abbreviations make the plot clearer to read by avoiding label overlaps.\
-From the above mosaic plot, we can see for the three abilities "omniknight_martyr", "slark_shadow_dance", and "winter_wyvern_arctic_burn", they perform significantly better on radiant, while for the ability "necrolyte_reapers_scythe", it performs better on dire (not radiant). In our case, these four abilities function much better on radiant. 
+From the above mosaic plot, we can see for the three abilities "omniknight_martyr", "slark_shadow_dance", and "winter_wyvern_arctic_burn", they perform significantly better on radiant, while for the ability "necrolyte_reapers_scythe", it performs only slightly higher on radiant. In general, we can argue that these four abilities function much better on radiant instead of dire. 
 
 ## What heroes are most commonly associated with the four good abilities?
 
-This question can be answered by drawing the separate barplots for each ability. When people are assigned hero, these heroes are designed with a specific role in mind, so they have tendence to select correlated abilities. From the barplots we can know what heroes are highly correlated to the selection of each ability among all four. 
+This question can be answered by drawing the separate barplots for each ability. When people are assigned hero, these heroes are designed with a specific role in mind, so they have tendence to select correlated abilities. The resulting visualizations offer a clear representation of the relationship between hero choices and the corresponding selection of specific abilities in the game.
 
 ```{r, echo=FALSE, results=FALSE, message=FALSE}
 df_n <- df_2[df_2$ability == "n",] 
@@ -225,7 +229,7 @@ From above barplots, we can see the heroes Lifeastealer and Nechrophos tends to 
 
 ## How many resources are consumed by these four abilities compared to the the other abilities?
 
-We want to draw histograms of continuous variable net worth faceted by all 10 abilities to see the distribution of net resources of each player possessing good abilities compared to rest of the abilities. In other words, this information gives us the total cost of choosing the four good abilities selected.
+We want to draw histograms of continuous variable net worth faceted by all 10 best abilities. By analyzing the histograms for each ability, we can gain a comprehensive understanding of the net worth distribution for players with the chosen top abilities, providing insights on the total cost associated with selecting these abilities in the game.
 
 ```{r, echo=FALSE, results=FALSE, message=FALSE}
 saved_for_fourth[saved_for_fourth == "omniknight_martyr"] <- 'o'
@@ -242,7 +246,7 @@ ggplot(saved_for_fourth, aes(net_worth))+
   theme_grey(9)
 ```
 
-From these histograms, we can see that the abilities "necrolyte_reapers_scythe" and "slark_shadow_dance" use relatively limited amount of resources, while the abilities "omniknight_martyr" and "winter_wyvern_arctic_burn" use relatively large amount of resources, meaning that there's higher cost selecting these abilities. 
+From these histograms, we can see that the abilities "necrolyte_reapers_scythe" and "slark_shadow_dance" use relatively limited amount of resources, while the abilities "omniknight_martyr" and "winter_wyvern_arctic_burn" exhibit a tendency to utilize a comparatively larger amount of resources. This observation suggests that there is a discernible difference in the resource requirements among the selected abilities, so players also need to consider this during the ability selection phase. 
 
 ## Analysis of Two Popular Abilities Based on Various Metrics
 

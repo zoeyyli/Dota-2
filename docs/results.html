@@ -179,7 +179,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#good-and-bad-abilities" id="toc-good-and-bad-abilities" class="nav-link active" data-scroll-target="#good-and-bad-abilities"><span class="header-section-number">3.1</span> Good and Bad Abilities</a></li>
+  <li><a href="#good-and-bad-abilitiesheroes" id="toc-good-and-bad-abilitiesheroes" class="nav-link active" data-scroll-target="#good-and-bad-abilitiesheroes"><span class="header-section-number">3.1</span> Good and Bad Abilities/Heroes</a></li>
   <li><a href="#which-abilities-have-the-highest-kills-gold-experiences-points-and-kda-and-are-therefore-the-most-valuable" id="toc-which-abilities-have-the-highest-kills-gold-experiences-points-and-kda-and-are-therefore-the-most-valuable" class="nav-link" data-scroll-target="#which-abilities-have-the-highest-kills-gold-experiences-points-and-kda-and-are-therefore-the-most-valuable"><span class="header-section-number">3.2</span> Which abilities have the highest kills, gold, experiences points, and kda, and are therefore the most valuable?</a></li>
   <li><a href="#do-these-four-good-abilities-function-better-on-radiant-or-dire" id="toc-do-these-four-good-abilities-function-better-on-radiant-or-dire" class="nav-link" data-scroll-target="#do-these-four-good-abilities-function-better-on-radiant-or-dire"><span class="header-section-number">3.3</span> Do these four good abilities function better on radiant or dire?</a></li>
   <li><a href="#what-heroes-are-most-commonly-associated-with-the-four-good-abilities" id="toc-what-heroes-are-most-commonly-associated-with-the-four-good-abilities" class="nav-link" data-scroll-target="#what-heroes-are-most-commonly-associated-with-the-four-good-abilities"><span class="header-section-number">3.4</span> What heroes are most commonly associated with the four good abilities?</a></li>
@@ -209,219 +209,77 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 <p>Before the data visualization, we will go over all the variables used below:</p>
-<ul>
-<li>hero (categorical variable): a playable character that is controlled by each player<br>
-</li>
-<li>ability (categorical variable): special skills or powers that each hero possesses, each hero has to choose four abilities<br>
-</li>
-<li>kills (continuous variable): the number of enemy heroes that a player or team has successfully defeated during a match<br>
-</li>
-<li>total_gold (continuous variable): the total amount of in-game currency (gold) that a player has accumulated during a match<br>
-</li>
-<li>total_xp (continuous variable): experience points earned by a player in the match<br>
-</li>
-<li>kda (continuous variable): kda stands for kills, Deaths, and Assists. It is a numerical representation of a player’s performance in a match based on these three key statistics<br>
-</li>
-<li>win (categorical variable): 1 represents winning the match and 0 represents loosing the match<br>
-</li>
-<li>isRadiant (categorical variable): it’s a boolean variable with True representing on Radiant and False&nbsp;representing on Dire which are two different factions in the match<br>
-</li>
-<li>net_worth (continuous variable): total amount of resources used by the player during the match<br>
-</li>
-<li>deaths (continuous variable): he number of times a hero has been killed during a match<br>
-</li>
-<li>duration (continuous variable): the length of time that an ability remains active or persists<br>
-</li>
-<li>hero_damage (continuous variable): the amount of damage dealt specifically to enemy heroes by the player<br>
-</li>
-<li>last_hits (continuous variable): the number of enemy creeps that a player’s hero delivers the killing blow to</li>
-</ul>
+<p>categorical variables:<br>
+- hero: a playable character that is controlled by each player<br>
+- ability: special skills or powers that each hero possesses, each hero has to choose four abilities<br>
+- win: 1 represents winning the match and 0 represents loosing the match<br>
+- isRadiant: it’s a boolean variable with True representing on Radiant and False representing on Dire which are two different factions in the match<br>
+</p>
+<p>continuous variables:<br>
+- kills: the number of enemy heroes that a player or team has successfully defeated during a match<br>
+- total_gold: the total amount of in-game currency (gold) that a player has accumulated during a match<br>
+- total_xp: experience points earned by a player in the match<br>
+- kda: kda stands for kills, Deaths, and Assists. It is a numerical representation of a player’s performance in a match based on these three key statistics<br>
+- net_worth: total amount of resources used by the player during the match<br>
+- deaths: he number of times a hero has been killed during a match<br>
+- duration: the length of time that an ability remains active or persists<br>
+- hero_damage: the amount of damage dealt specifically to enemy heroes by the player<br>
+- last_hits: the number of enemy creeps that a player’s hero delivers the killing blow to<br>
+</p>
+<section id="good-and-bad-abilitiesheroes" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="good-and-bad-abilitiesheroes"><span class="header-section-number">3.1</span> Good and Bad Abilities/Heroes</h2>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: ggplot2</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Registered S3 method overwritten by 'GGally':
-  method from   
-  +.gg   ggplot2</code></pre>
-</div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'dplyr'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:stats':
-
-    filter, lag</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
-
-    intersect, setdiff, setequal, union</code></pre>
-</div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parcoords)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vcd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: grid</code></pre>
-</div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>dota2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"addata.csv"</span>)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>dota2 <span class="ot">=</span> dota2[ , <span class="fu">colSums</span>(<span class="fu">is.na</span>(dota2)) <span class="sc">==</span> <span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<section id="good-and-bad-abilities" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="good-and-bad-abilities"><span class="header-section-number">3.1</span> Good and Bad Abilities</h2>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dfc <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">table</span>(dota2<span class="sc">$</span>ability))</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(dfc)[<span class="dv">1</span>] <span class="ot">=</span> <span class="st">'ability'</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>dfc <span class="ot">&lt;-</span> dfc[dfc<span class="sc">$</span>Freq <span class="sc">&gt;</span> <span class="dv">29</span>,]</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>dota2 <span class="ot">&lt;-</span> dota2[dota2<span class="sc">$</span>ability <span class="sc">%in%</span> dfc<span class="sc">$</span>ability,]</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>wldf <span class="ot">&lt;-</span> dota2[,<span class="fu">c</span>(<span class="st">"win"</span>, <span class="st">"ability"</span>)]</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>wldf <span class="ot">&lt;-</span> wldf <span class="sc">%&gt;%</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(win <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span>  <span class="co"># Consider only the rows where the round was won</span></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ability) <span class="sc">%&gt;%</span></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">wins =</span> <span class="fu">n</span>())</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>wldf <span class="ot">&lt;-</span> <span class="fu">merge</span>(wldf, dfc, <span class="at">by =</span> <span class="st">"ability"</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>wldf<span class="sc">$</span>winrate <span class="ot">&lt;-</span> wldf<span class="sc">$</span>wins <span class="sc">/</span> wldf<span class="sc">$</span>Freq</span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>wldf <span class="ot">&lt;-</span> wldf[<span class="fu">order</span>(<span class="sc">-</span>wldf<span class="sc">$</span>winrate),]</span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>wlends <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">head</span>(wldf, <span class="dv">10</span>), <span class="fu">tail</span>(wldf, <span class="dv">10</span>))</span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>wlends <span class="ot">&lt;-</span> wlends <span class="sc">%&gt;%</span></span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">new_col =</span> <span class="fu">ifelse</span>(<span class="fu">row_number</span>() <span class="sc">&lt;=</span> <span class="dv">10</span>, <span class="st">"Best Abilities"</span>, <span class="fu">ifelse</span>(<span class="fu">row_number</span>() <span class="sc">&gt;</span> <span class="fu">n</span>() <span class="sc">-</span> <span class="dv">10</span>, <span class="st">"Worst Abilities"</span>, <span class="cn">NA</span>)))</span>
-<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(wlends, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(ability,winrate),<span class="at">y=</span>winrate))<span class="sc">+</span></span>
-<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">color=</span><span class="st">'lightblue'</span>, <span class="at">fill =</span><span class="st">'lightblue'</span>, <span class="at">width=</span><span class="fl">0.8</span>)<span class="sc">+</span></span>
-<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>new_col)<span class="sc">+</span></span>
-<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"The 10 Best and Worst Abilities by Winrate"</span>, <span class="at">x=</span><span class="st">"Ability"</span>, <span class="at">y =</span> <span class="st">"Winrate"</span>)<span class="sc">+</span></span>
-<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">size =</span> <span class="dv">8</span>),</span>
-<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
-<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output-display">
 <p><img src="results_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="960"></p>
 </div>
 </div>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#saved for d3 use</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>df_d3 <span class="ot">&lt;-</span> wlends[,<span class="fu">c</span>(<span class="st">'ability'</span>,<span class="st">'winrate'</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
 <p>There are over 500 abilities in total, which is an extremely large pool. In order to answer the research questions, we need to select the abilities we would like to analyze. Before we discover which abilities are good or bad, we should make sure that we are working with a good sample size. To accomplish this, we will only consider abilities that appear in at least 30 matches. Then, we can calculate the total number of wins associated with each ability and determine the win rate by dividing by frequency. The results are plotted above. We can see Slark’s “Shadow Dance” topping the chart with a 77.78% winrate, while Tidehunter’s “Anchor Smash” is at 22.58% on the bottom.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>dfh <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">table</span>(dota2<span class="sc">$</span>hero))</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(dfh)[<span class="dv">1</span>] <span class="ot">=</span> <span class="st">'hero'</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>wlhdf <span class="ot">&lt;-</span> dota2[,<span class="fu">c</span>(<span class="st">"win"</span>, <span class="st">"hero"</span>)]</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>wlhdf <span class="ot">&lt;-</span> wlhdf <span class="sc">%&gt;%</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(win <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span>  <span class="co"># Consider only the rows where the round was won</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(hero) <span class="sc">%&gt;%</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">wins =</span> <span class="fu">n</span>())</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>wlhdf <span class="ot">&lt;-</span> <span class="fu">merge</span>(wlhdf, dfh, <span class="at">by =</span> <span class="st">"hero"</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>wlhdf<span class="sc">$</span>winrate <span class="ot">&lt;-</span> wlhdf<span class="sc">$</span>wins <span class="sc">/</span> wlhdf<span class="sc">$</span>Freq</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>wlhdf <span class="ot">&lt;-</span> wlhdf[<span class="fu">order</span>(<span class="sc">-</span>wlhdf<span class="sc">$</span>winrate),]</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>wlhends <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">head</span>(wlhdf, <span class="dv">10</span>), <span class="fu">tail</span>(wlhdf, <span class="dv">10</span>))</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>wlhends <span class="ot">&lt;-</span> wlhends <span class="sc">%&gt;%</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">new_col =</span> <span class="fu">ifelse</span>(<span class="fu">row_number</span>() <span class="sc">&lt;=</span> <span class="dv">10</span>, <span class="st">"Best Heroes"</span>, <span class="fu">ifelse</span>(<span class="fu">row_number</span>() <span class="sc">&gt;</span> <span class="fu">n</span>() <span class="sc">-</span> <span class="dv">10</span>, <span class="st">"Worst Heroes"</span>, <span class="cn">NA</span>)))</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(wlhends, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(hero,winrate),<span class="at">y=</span>winrate))<span class="sc">+</span></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">color=</span><span class="st">'pink'</span>, <span class="at">fill =</span><span class="st">'pink'</span>, <span class="at">width=</span><span class="fl">0.8</span>)<span class="sc">+</span></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>new_col)<span class="sc">+</span></span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"The 10 Best and 10 Worst Heroes by Winrate"</span>, <span class="at">x=</span><span class="st">"Ability"</span>, <span class="at">y =</span> <span class="st">"Winrate"</span>)<span class="sc">+</span></span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">size =</span> <span class="dv">8</span>),</span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output-display">
 <p><img src="results_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>This is the barplots of 10 best heroes and 10 worst heroes selected from the original dataset based on their win rates. From this graph, we can see for what heroes tend to have higher win rate, which will also affect the effectiveness of the abilities chosen which will be further analyzed below. From the plots we can see the top heroes such as Mars and Bane have almost win rate of 0.8 which is really high.</p>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> wlends</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df[<span class="fu">order</span>(df<span class="sc">$</span>Freq,<span class="at">decreasing=</span><span class="cn">TRUE</span>),]</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">head</span>(df,<span class="dv">10</span>)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>saved_for_fourth <span class="ot">&lt;-</span> dota2[dota2<span class="sc">$</span>ability <span class="sc">%in%</span> df<span class="sc">$</span>ability,]</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>dota2 <span class="ot">&lt;-</span> dota2[dota2<span class="sc">$</span>ability <span class="sc">%in%</span> df<span class="sc">$</span>ability,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
 </section>
 <section id="which-abilities-have-the-highest-kills-gold-experiences-points-and-kda-and-are-therefore-the-most-valuable" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="which-abilities-have-the-highest-kills-gold-experiences-points-and-kda-and-are-therefore-the-most-valuable"><span class="header-section-number">3.2</span> Which abilities have the highest kills, gold, experiences points, and kda, and are therefore the most valuable?</h2>
-<p>To answer the question, we decide to draw parallel coordinate plots which is useful when we want to get the abilities that top the charts in all four indicators. It’s important to note that kda is a statistic that is used to measure a player’s performance.</p>
+<p>To answer the question, we decide to draw parallel coordinate plots.By leveraging parallel coordinate plots, we aim to discern abilities that consistently stand out across all four indicators listed in the question, providing a comprehensive perspective on their overall effectiveness.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df_ability <span class="ot">&lt;-</span> dota2[,<span class="fu">c</span>(<span class="st">"total_gold"</span>,<span class="st">"kills"</span>,<span class="st">"kda"</span>,<span class="st">"total_xp"</span>, <span class="st">"ability"</span>)]</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>GGally<span class="sc">::</span><span class="fu">ggparcoord</span>(<span class="at">data =</span> df_ability, <span class="at">columns =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">alphaLines =</span> .<span class="dv">4</span>, <span class="at">groupColumn =</span> <span class="dv">5</span>, <span class="at">splineFactor =</span> <span class="cn">TRUE</span>, <span class="at">title =</span> <span class="st">"Parallel Coordinates Plot"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output-display">
 <p><img src="results_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>This is the parallel coordinate plot colored by abilities so that we can see the trend of lines of different colors. In general, the data values are compact with only one line colored pink with extremely high value of kda that belongs to the ability “slark_shadow_dance”(might be outlier).</p>
+<p>This is the parallel coordinate plot colored by abilities so that we can see the trend of lines of different colors. In general, the data values are compact with only one line colored pink with extremely high value of kda that belongs to the ability “slark_shadow_dance” (potential outlier).However, it’s hard to tell what abilities are high across all four attributes. To address this limitation and provide a more interactive and detailed exploration, we introduced an interactive version of the parallel coordinate plot, as illustrated below.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> dota2[,<span class="fu">c</span>(<span class="st">"total_gold"</span>,<span class="st">"kills"</span>,<span class="st">"kda"</span>,<span class="st">"total_xp"</span>)]</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>parcoords<span class="sc">::</span><span class="fu">parcoords</span>(<span class="at">data =</span> df, <span class="at">rownames =</span> <span class="cn">FALSE</span>, <span class="at">brushMode =</span> <span class="st">"1d-axes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parcoords)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> dota2[,<span class="fu">c</span>(<span class="st">"total_gold"</span>,<span class="st">"kills"</span>,<span class="st">"kda"</span>,<span class="st">"total_xp"</span>)]</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>parcoords<span class="sc">::</span><span class="fu">parcoords</span>(<span class="at">data =</span> df, <span class="at">rownames =</span> <span class="cn">FALSE</span>, <span class="at">brushMode =</span> <span class="st">"1d-axes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div class="parcoords html-widget html-fill-item-overflow-hidden html-fill-item" height="464px" id="htmlwidget-c679206802523257d569" style="width:100%;height:464px; position:relative; overflow-x:auto; overflow-y:hidden; max-width:100%;" width="100%"></div>
-<script type="application/json" data-for="htmlwidget-c679206802523257d569">{"x":{"data":{"names":["9","27","120","154","206","208","304","321","343","352","374","384","395","449","471","485","486","586","596","660","661","714","774","859","878","888","936","979","1009","1010","1046","1083","1117","1142","1151","1209","1262","1271","1296","1339","1351","1408","1418","1492","1499","1518","1577","1587","1652","1657","1663","1760","1794","1812","1850","1877","1954","1982","1989","2001","2053","2058","2098","2101","2113","2115","2131","2188","2224","2275","2300","2307","2352","2382","2390","2393","2442","2465","2484","2524","2561","2580","2607","2618","2676","2696","2713","2724","2735","2768","2831","2835","2836","2880","2884","2888","2939","2992","3093","3128","3264","3371","3405","3440","3452","3500","3533","3566","3570","3623","3722","3781","3793","3867","3895","3901","3931","3976","3986","4023","4050","4096","4149","4172","4174","4251","4278","4384","4415","4504","4569","4599","4639","4674","4745","4805","4823","4840","4885","4902","4906","4990","5009","5032","5070","5104","5149","5259","5292","5308","5328","5400","5437","5469","5511","5518","5627","5640","5655","5660","5690","5713","5728","5757","5762","5777","5855","5860","5886","5944","6000","6017","6021","6153","6192","6197","6200","6209","6259","6264","6318","6335","6338","6383","6422","6425","6436","6541","6553","6560","6581","6665","6718","6744","6841","6842","6943","6949","6958","6996","7027","7036","7052","7055","7123","7157","7163","7173","7312","7371","7422","7432","7492","7517","7556","7575","7608","7614","7698","7708","7712","7756","7780","7796","7845","7885","7914","8013","8029","8081","8106","8107","8155","8194","8261","8272","8371","8583","8606","8616","8639","8713","8760","8819","8906","8933","8941","8946","8953","8985","9044","9125","9180","9188","9251","9258","9283","9320","9394","9398","9495","9527","9549","9615","9625","9746","9747","9763","9851","9858","9863","9896","10004","10079","10091","10108","10110","10133","10135","10197","10217","10230","10350","10359","10388","10396","10398","10402","10570","10624","10626","10651","10706","10760","10762","10798","10848","10858","10886","10913","10987","10995","11043","11046","11110","11115","11131","11202","11228","11266","11304","11306","11315","11344","11368","11374","11394","11399","11430","11463","11525","11546","11588","11600","11630","11795","11835","11839","11863","11869","11939","11997","12031","12046","12051","12086","12103","12171","12202","12305","12325","12352","12437","12490","12495","12530","12548","12565","12566","12576","12629","12667","12758","12762","12770","12873","12878","12887","12898"],"total_gold":[25183,30851,27274,13003,12509,12509,30185,17614,9393,14259,5682,17392,15124,30046,36036,29454,29454,19856,43413,41092,41092,12212,18425,12024,14681,16605,33060,10076,40849,26869,24098,7600,10773,10589,19661,28383,10184,24656,13625,20535,21393,33108,18393,11888,15315,11923,20632,15562,22170,15846,17062,21730,21035,19721,14113,22916,11049,19572,17472,16842,18437,28001,32981,27420,15416,13844,2495,7158,29258,45758,34103,24064,41526,23287,44698,44698,18171,8458,34603,27803,23910,13807,8924,6370,11860,8212,24300,11296,22921,25810,10384,19353,19353,7513,14257,20178,14678,16241,14867,13989,33081,16902,20741,23265,21574,33336,11142,8126,23404,13528,5063,16992,7833,11849,803,3279,15762,19533,23324,44624,14906,23438,8492,14200,15898,23813,20849,31291,12208,12078,17051,13892,33357,14560,15186,17199,15574,17385,13578,34735,13463,12731,31562,29479,4085,15596,8426,20644,18215,20055,31988,15729,29856,30290,24238,13424,12979,12064,29373,16653,37256,26911,27904,13328,15084,15235,48727,35431,20899,41817,11873,15934,10973,13462,17824,26092,12401,14457,15542,25758,29502,18542,18542,5726,12854,45142,57973,29612,27312,37425,52298,7972,26694,19224,8557,8557,12681,44236,57094,13792,12777,22034,22550,11654,21450,27471,29373,38381,17362,17657,13438,17232,16742,14809,20824,26392,16629,19116,28914,11165,10986,15788,36967,19329,34913,9604,23854,21269,34195,21612,12707,12707,29552,33920,38006,37642,26212,13662,14336,11006,14901,15865,19286,8477,52783,48085,21011,20384,26112,29923,11192,19873,39718,29848,13852,9705,6431,19545,28431,28206,21129,29500,32595,10905,22618,32250,30911,14901,20435,25357,13320,14441,14840,20413,19307,32885,21853,1935,4532,15235,18512,11453,25801,16759,23798,9961,9961,18167,24464,6187,5603,16446,16305,22185,22185,12564,13190,34931,22454,16334,28446,12717,9350,12672,14402,10160,21943,14075,7112,17469,11515,6009,22678,14554,7411,16972,49119,34226,40306,13546,22654,22317,21516,39950,18600,24445,17093,16014,31803,30903,13574,8641,12674,16850,10275,16705,43394,14653,8664,15724,24641,24401,19061,20601,19434,17237,18630,11969,11969,16075,12762,31382,12009,26665,11347,22332,3846,9039,3472],"kills":[5,13,7,2,6,6,4,7,2,4,0,6,4,7,20,10,10,2,14,14,14,7,4,3,3,16,9,0,17,14,10,0,4,0,12,10,2,10,2,6,9,7,5,2,9,1,8,4,10,6,8,2,17,9,1,16,2,7,3,4,5,13,18,20,3,5,0,2,10,20,21,6,20,4,18,18,14,4,10,20,9,5,10,2,1,3,21,2,16,7,8,7,7,1,3,7,7,8,13,3,11,13,3,14,10,15,1,2,15,9,0,11,1,1,0,3,0,2,5,34,6,9,2,8,1,15,9,9,2,4,6,6,11,5,3,3,2,8,4,20,3,4,13,4,0,6,3,3,1,6,17,5,5,17,11,5,4,3,14,9,9,5,12,2,8,7,4,9,1,20,10,11,4,5,2,17,5,8,7,16,22,7,7,0,7,13,22,13,7,6,27,5,10,6,8,8,0,8,24,2,7,14,12,1,6,11,7,17,3,0,0,6,7,6,11,9,9,4,13,4,10,6,15,8,14,5,4,14,3,11,5,5,9,5,14,13,22,4,5,3,7,0,9,1,14,20,4,2,5,8,5,12,16,7,5,2,2,6,4,4,9,8,4,8,8,9,12,8,7,6,10,6,3,14,3,12,3,0,3,12,7,3,11,1,3,3,3,6,13,0,2,3,9,4,4,5,7,13,10,4,14,3,0,6,8,1,4,5,3,8,2,3,15,6,0,5,7,11,11,0,6,4,4,19,5,6,4,4,17,6,1,3,1,2,3,2,17,4,3,7,8,11,5,10,4,5,6,8,8,6,6,12,3,15,1,14,1,9,1],"kda":[1.92,3,2,2.3,1.6,1.6,3.5,0.92,1.2,1.13,0.44,5,4.2,2.17,7,8.25,8.25,1.73,2.4,3.91,3.91,3.57,1.62,7,2,42,2.57,0.5600000000000001,19,2.8,3,0.57,3.8,0.43,4.86,2.81,1,7.75,1.5,1.78,2.67,3.14,3.22,3,3.5,0.23,1.77,2,22,2.56,3.75,1.05,3.71,1.63,2.83,2.38,1.88,4.5,1.8,2.45,2.17,3.38,15.5,9,0.86,1.06,2,1,2.13,4.13,9.5,1.36,4.43,3.13,10.67,10.67,6,0.64,2.25,2.75,1.91,2.13,5.5,1.5,1.8,1.45,3.78,9,10.5,10,1.27,2.22,2.22,6.5,1.29,1.64,1.89,2.92,2.22,3.67,3,3.11,1.2,5.25,3.13,4,1,2,7.75,1.45,0.33,7,0.31,2.33,0,5,2.1,2,1.83,9,5.25,13.5,1.64,2,1.07,7.5,5.5,7.5,1.7,1.6,1.62,2.88,5.17,0.77,2,3,1.08,3.75,1.83,6.2,1.64,1.83,4.67,1.33,0.33,1.8,1.4,2.13,2.09,1.62,5,1.75,1.67,8.25,1.73,1.36,1.06,3.57,14,2,1.21,4.33,4.67,0.64,7.5,20,5.6,2,0.93,7.33,2.78,13,0.67,0.64,3,10.67,3.5,2.22,5.25,13,4.43,1.44,1.44,0,4.33,1.61,6.43,8,1.75,1.82,5,0.67,7.75,1.91,8.5,8.5,1,4.17,3.4,2.71,6.25,11.5,3.75,2.2,1.67,2.46,2.17,4.09,2.38,3,0.54,1.58,1.33,1.54,1.5,4.33,1.69,2,3.57,2.29,5,2.08,4,1.8,6.5,1.33,1.64,2.13,1.53,6,1.56,1.56,8,4.5,4.43,3.9,5,4,4.67,0.67,10,6,1.36,0.2,2.33,3.38,2.8,1.29,2,4.13,2.8,11,7.75,10.33,7.33,0.5,0.62,1.83,1.36,3.11,1.85,2.13,2.07,2.75,2,3.88,2.89,4.29,3.43,2.55,2,1.5,1.33,2,7,2.25,1.33,0,3,2.45,4.67,2.11,1.88,1.56,3.29,1.08,1.08,1.64,2.71,0.4,0.5,3.25,2.43,3.5,3.5,7,1.73,2.5,5,0.82,11,4.67,1.5,0.92,1.15,0.7,2.2,2.29,0.76,3.33,1.33,0.5600000000000001,20,2,1.29,1.88,3.64,1.83,2.86,0.33,4.75,1.71,1.83,3.89,1.31,4,1.42,2.78,4.2,5.75,0.43,0.58,8.5,5,3.33,2.44,3.33,4.2,0.79,2.33,3.5,1.67,9,3.43,1.67,1.9,2.45,0.77,0.77,6,2.22,2.44,7.33,22,4.4,2.71,1.6,9,0.43],"total_xp":[30112,35286,30811,20044,14079,14079,30585,18935,12149,14906,7576,18540,21037,34749,46134,35439,35439,34780,43290,50728,50728,18861,24520,18800,21258,21102,39840,13984,45425,35098,35098,9713,12150,14522,27253,38045,13721,30373,20194,23785,27080,35119,29086,15672,19563,11888,27258,23945,25263,20328,19807,30201,26627,22199,20820,27772,19618,25914,20412,21294,28571,36426,41839,37621,19251,20133,2316,8673,32771,43323,41740,35352,50936,34820,45746,45746,15983,8031,39838,35191,37786,20386,8806,6489,12362,10650,27712,17685,26544,27950,13385,23500,23500,9141,18766,33707,18252,24094,17521,18452,44362,25056,21691,35457,28156,42360,12549,10338,28832,16355,3281,18864,11577,17633,316,2102,23046,24792,22880,49748,22394,26980,10089,18644,19475,33624,20047,36250,19500,16834,20515,20820,42612,16632,17868,20097,13377,17226,17463,41351,20887,19281,39218,41354,3941,18316,14950,22929,28310,31002,37295,17502,35258,35692,35010,15702,9879,15736,31701,19407,45295,46902,30602,17636,16192,15235,50988,50920,28429,46263,15831,18838,12978,18736,27692,35515,12570,17928,26195,35218,41875,26746,26746,5379,10961,50061,58239,41553,36452,40887,48837,9545,34449,21796,10265,10265,13692,49583,54293,17319,17269,19788,23308,17511,27866,44983,42522,48900,20793,21159,17892,28971,23288,19486,31765,36902,22920,26821,33813,9683,11701,32054,44361,24388,38170,12106,28709,30127,37105,24472,19110,19110,35153,46481,41583,44121,28050,19382,17197,17995,15612,27227,25172,7691,58473,45210,31725,32300,26206,36699,10781,23144,45640,40196,15897,10972,8665,23408,37326,35469,28908,35621,46898,14272,31560,39991,39147,18255,31355,31562,21882,23089,18270,27554,31909,41924,26054,2555,3838,18332,22906,15523,27962,21020,35433,12864,12864,30350,30223,8588,5494,15065,14565,33345,33345,9888,22650,40025,29739,20652,31257,19377,17673,15412,15365,13154,27509,14344,10489,19678,14114,8133,26975,14115,13939,21696,52262,46865,57659,17878,31140,29495,36757,45544,25639,23237,25100,22806,36571,36571,17115,9382,13634,14831,10482,30049,46905,21375,9355,25793,35558,36441,28592,26256,34919,27561,32603,12351,12351,17412,16365,41050,19916,30767,19056,35027,4894,8156,5133]},"options":{"rownames":false,"brushMode":"1D-axes","brushPredicate":"AND","reorderable":false,"margin":{"top":50,"bottom":50,"left":100,"right":50},"mode":false,"bundlingStrength":0.5,"smoothness":0},"autoresize":false,"tasks":null},"evals":[],"jsHooks":[]}</script>
+<div class="parcoords html-widget html-fill-item-overflow-hidden html-fill-item" height="464px" id="htmlwidget-0ab2ac43b74c428dbce4" style="width:100%;height:464px; position:relative; overflow-x:auto; overflow-y:hidden; max-width:100%;" width="100%"></div>
+<script type="application/json" data-for="htmlwidget-0ab2ac43b74c428dbce4">{"x":{"data":{"names":["9","27","120","154","206","208","304","321","343","352","374","384","395","449","471","485","486","586","596","660","661","714","774","859","878","888","936","979","1009","1010","1046","1083","1117","1142","1151","1209","1262","1271","1296","1339","1351","1408","1418","1492","1499","1518","1577","1587","1652","1657","1663","1760","1794","1812","1850","1877","1954","1982","1989","2001","2053","2058","2098","2101","2113","2115","2131","2188","2224","2275","2300","2307","2352","2382","2390","2393","2442","2465","2484","2524","2561","2580","2607","2618","2676","2696","2713","2724","2735","2768","2831","2835","2836","2880","2884","2888","2939","2992","3093","3128","3264","3371","3405","3440","3452","3500","3533","3566","3570","3623","3722","3781","3793","3867","3895","3901","3931","3976","3986","4023","4050","4096","4149","4172","4174","4251","4278","4384","4415","4504","4569","4599","4639","4674","4745","4805","4823","4840","4885","4902","4906","4990","5009","5032","5070","5104","5149","5259","5292","5308","5328","5400","5437","5469","5511","5518","5627","5640","5655","5660","5690","5713","5728","5757","5762","5777","5855","5860","5886","5944","6000","6017","6021","6153","6192","6197","6200","6209","6259","6264","6318","6335","6338","6383","6422","6425","6436","6541","6553","6560","6581","6665","6718","6744","6841","6842","6943","6949","6958","6996","7027","7036","7052","7055","7123","7157","7163","7173","7312","7371","7422","7432","7492","7517","7556","7575","7608","7614","7698","7708","7712","7756","7780","7796","7845","7885","7914","8013","8029","8081","8106","8107","8155","8194","8261","8272","8371","8583","8606","8616","8639","8713","8760","8819","8906","8933","8941","8946","8953","8985","9044","9125","9180","9188","9251","9258","9283","9320","9394","9398","9495","9527","9549","9615","9625","9746","9747","9763","9851","9858","9863","9896","10004","10079","10091","10108","10110","10133","10135","10197","10217","10230","10350","10359","10388","10396","10398","10402","10570","10624","10626","10651","10706","10760","10762","10798","10848","10858","10886","10913","10987","10995","11043","11046","11110","11115","11131","11202","11228","11266","11304","11306","11315","11344","11368","11374","11394","11399","11430","11463","11525","11546","11588","11600","11630","11795","11835","11839","11863","11869","11939","11997","12031","12046","12051","12086","12103","12171","12202","12305","12325","12352","12437","12490","12495","12530","12548","12565","12566","12576","12629","12667","12758","12762","12770","12873","12878","12887","12898"],"total_gold":[25183,30851,27274,13003,12509,12509,30185,17614,9393,14259,5682,17392,15124,30046,36036,29454,29454,19856,43413,41092,41092,12212,18425,12024,14681,16605,33060,10076,40849,26869,24098,7600,10773,10589,19661,28383,10184,24656,13625,20535,21393,33108,18393,11888,15315,11923,20632,15562,22170,15846,17062,21730,21035,19721,14113,22916,11049,19572,17472,16842,18437,28001,32981,27420,15416,13844,2495,7158,29258,45758,34103,24064,41526,23287,44698,44698,18171,8458,34603,27803,23910,13807,8924,6370,11860,8212,24300,11296,22921,25810,10384,19353,19353,7513,14257,20178,14678,16241,14867,13989,33081,16902,20741,23265,21574,33336,11142,8126,23404,13528,5063,16992,7833,11849,803,3279,15762,19533,23324,44624,14906,23438,8492,14200,15898,23813,20849,31291,12208,12078,17051,13892,33357,14560,15186,17199,15574,17385,13578,34735,13463,12731,31562,29479,4085,15596,8426,20644,18215,20055,31988,15729,29856,30290,24238,13424,12979,12064,29373,16653,37256,26911,27904,13328,15084,15235,48727,35431,20899,41817,11873,15934,10973,13462,17824,26092,12401,14457,15542,25758,29502,18542,18542,5726,12854,45142,57973,29612,27312,37425,52298,7972,26694,19224,8557,8557,12681,44236,57094,13792,12777,22034,22550,11654,21450,27471,29373,38381,17362,17657,13438,17232,16742,14809,20824,26392,16629,19116,28914,11165,10986,15788,36967,19329,34913,9604,23854,21269,34195,21612,12707,12707,29552,33920,38006,37642,26212,13662,14336,11006,14901,15865,19286,8477,52783,48085,21011,20384,26112,29923,11192,19873,39718,29848,13852,9705,6431,19545,28431,28206,21129,29500,32595,10905,22618,32250,30911,14901,20435,25357,13320,14441,14840,20413,19307,32885,21853,1935,4532,15235,18512,11453,25801,16759,23798,9961,9961,18167,24464,6187,5603,16446,16305,22185,22185,12564,13190,34931,22454,16334,28446,12717,9350,12672,14402,10160,21943,14075,7112,17469,11515,6009,22678,14554,7411,16972,49119,34226,40306,13546,22654,22317,21516,39950,18600,24445,17093,16014,31803,30903,13574,8641,12674,16850,10275,16705,43394,14653,8664,15724,24641,24401,19061,20601,19434,17237,18630,11969,11969,16075,12762,31382,12009,26665,11347,22332,3846,9039,3472],"kills":[5,13,7,2,6,6,4,7,2,4,0,6,4,7,20,10,10,2,14,14,14,7,4,3,3,16,9,0,17,14,10,0,4,0,12,10,2,10,2,6,9,7,5,2,9,1,8,4,10,6,8,2,17,9,1,16,2,7,3,4,5,13,18,20,3,5,0,2,10,20,21,6,20,4,18,18,14,4,10,20,9,5,10,2,1,3,21,2,16,7,8,7,7,1,3,7,7,8,13,3,11,13,3,14,10,15,1,2,15,9,0,11,1,1,0,3,0,2,5,34,6,9,2,8,1,15,9,9,2,4,6,6,11,5,3,3,2,8,4,20,3,4,13,4,0,6,3,3,1,6,17,5,5,17,11,5,4,3,14,9,9,5,12,2,8,7,4,9,1,20,10,11,4,5,2,17,5,8,7,16,22,7,7,0,7,13,22,13,7,6,27,5,10,6,8,8,0,8,24,2,7,14,12,1,6,11,7,17,3,0,0,6,7,6,11,9,9,4,13,4,10,6,15,8,14,5,4,14,3,11,5,5,9,5,14,13,22,4,5,3,7,0,9,1,14,20,4,2,5,8,5,12,16,7,5,2,2,6,4,4,9,8,4,8,8,9,12,8,7,6,10,6,3,14,3,12,3,0,3,12,7,3,11,1,3,3,3,6,13,0,2,3,9,4,4,5,7,13,10,4,14,3,0,6,8,1,4,5,3,8,2,3,15,6,0,5,7,11,11,0,6,4,4,19,5,6,4,4,17,6,1,3,1,2,3,2,17,4,3,7,8,11,5,10,4,5,6,8,8,6,6,12,3,15,1,14,1,9,1],"kda":[1.92,3,2,2.3,1.6,1.6,3.5,0.92,1.2,1.13,0.44,5,4.2,2.17,7,8.25,8.25,1.73,2.4,3.91,3.91,3.57,1.62,7,2,42,2.57,0.5600000000000001,19,2.8,3,0.57,3.8,0.43,4.86,2.81,1,7.75,1.5,1.78,2.67,3.14,3.22,3,3.5,0.23,1.77,2,22,2.56,3.75,1.05,3.71,1.63,2.83,2.38,1.88,4.5,1.8,2.45,2.17,3.38,15.5,9,0.86,1.06,2,1,2.13,4.13,9.5,1.36,4.43,3.13,10.67,10.67,6,0.64,2.25,2.75,1.91,2.13,5.5,1.5,1.8,1.45,3.78,9,10.5,10,1.27,2.22,2.22,6.5,1.29,1.64,1.89,2.92,2.22,3.67,3,3.11,1.2,5.25,3.13,4,1,2,7.75,1.45,0.33,7,0.31,2.33,0,5,2.1,2,1.83,9,5.25,13.5,1.64,2,1.07,7.5,5.5,7.5,1.7,1.6,1.62,2.88,5.17,0.77,2,3,1.08,3.75,1.83,6.2,1.64,1.83,4.67,1.33,0.33,1.8,1.4,2.13,2.09,1.62,5,1.75,1.67,8.25,1.73,1.36,1.06,3.57,14,2,1.21,4.33,4.67,0.64,7.5,20,5.6,2,0.93,7.33,2.78,13,0.67,0.64,3,10.67,3.5,2.22,5.25,13,4.43,1.44,1.44,0,4.33,1.61,6.43,8,1.75,1.82,5,0.67,7.75,1.91,8.5,8.5,1,4.17,3.4,2.71,6.25,11.5,3.75,2.2,1.67,2.46,2.17,4.09,2.38,3,0.54,1.58,1.33,1.54,1.5,4.33,1.69,2,3.57,2.29,5,2.08,4,1.8,6.5,1.33,1.64,2.13,1.53,6,1.56,1.56,8,4.5,4.43,3.9,5,4,4.67,0.67,10,6,1.36,0.2,2.33,3.38,2.8,1.29,2,4.13,2.8,11,7.75,10.33,7.33,0.5,0.62,1.83,1.36,3.11,1.85,2.13,2.07,2.75,2,3.88,2.89,4.29,3.43,2.55,2,1.5,1.33,2,7,2.25,1.33,0,3,2.45,4.67,2.11,1.88,1.56,3.29,1.08,1.08,1.64,2.71,0.4,0.5,3.25,2.43,3.5,3.5,7,1.73,2.5,5,0.82,11,4.67,1.5,0.92,1.15,0.7,2.2,2.29,0.76,3.33,1.33,0.5600000000000001,20,2,1.29,1.88,3.64,1.83,2.86,0.33,4.75,1.71,1.83,3.89,1.31,4,1.42,2.78,4.2,5.75,0.43,0.58,8.5,5,3.33,2.44,3.33,4.2,0.79,2.33,3.5,1.67,9,3.43,1.67,1.9,2.45,0.77,0.77,6,2.22,2.44,7.33,22,4.4,2.71,1.6,9,0.43],"total_xp":[30112,35286,30811,20044,14079,14079,30585,18935,12149,14906,7576,18540,21037,34749,46134,35439,35439,34780,43290,50728,50728,18861,24520,18800,21258,21102,39840,13984,45425,35098,35098,9713,12150,14522,27253,38045,13721,30373,20194,23785,27080,35119,29086,15672,19563,11888,27258,23945,25263,20328,19807,30201,26627,22199,20820,27772,19618,25914,20412,21294,28571,36426,41839,37621,19251,20133,2316,8673,32771,43323,41740,35352,50936,34820,45746,45746,15983,8031,39838,35191,37786,20386,8806,6489,12362,10650,27712,17685,26544,27950,13385,23500,23500,9141,18766,33707,18252,24094,17521,18452,44362,25056,21691,35457,28156,42360,12549,10338,28832,16355,3281,18864,11577,17633,316,2102,23046,24792,22880,49748,22394,26980,10089,18644,19475,33624,20047,36250,19500,16834,20515,20820,42612,16632,17868,20097,13377,17226,17463,41351,20887,19281,39218,41354,3941,18316,14950,22929,28310,31002,37295,17502,35258,35692,35010,15702,9879,15736,31701,19407,45295,46902,30602,17636,16192,15235,50988,50920,28429,46263,15831,18838,12978,18736,27692,35515,12570,17928,26195,35218,41875,26746,26746,5379,10961,50061,58239,41553,36452,40887,48837,9545,34449,21796,10265,10265,13692,49583,54293,17319,17269,19788,23308,17511,27866,44983,42522,48900,20793,21159,17892,28971,23288,19486,31765,36902,22920,26821,33813,9683,11701,32054,44361,24388,38170,12106,28709,30127,37105,24472,19110,19110,35153,46481,41583,44121,28050,19382,17197,17995,15612,27227,25172,7691,58473,45210,31725,32300,26206,36699,10781,23144,45640,40196,15897,10972,8665,23408,37326,35469,28908,35621,46898,14272,31560,39991,39147,18255,31355,31562,21882,23089,18270,27554,31909,41924,26054,2555,3838,18332,22906,15523,27962,21020,35433,12864,12864,30350,30223,8588,5494,15065,14565,33345,33345,9888,22650,40025,29739,20652,31257,19377,17673,15412,15365,13154,27509,14344,10489,19678,14114,8133,26975,14115,13939,21696,52262,46865,57659,17878,31140,29495,36757,45544,25639,23237,25100,22806,36571,36571,17115,9382,13634,14831,10482,30049,46905,21375,9355,25793,35558,36441,28592,26256,34919,27561,32603,12351,12351,17412,16365,41050,19916,30767,19056,35027,4894,8156,5133]},"options":{"rownames":false,"brushMode":"1D-axes","brushPredicate":"AND","reorderable":false,"margin":{"top":50,"bottom":50,"left":100,"right":50},"mode":false,"bundlingStrength":0.5,"smoothness":0},"autoresize":false,"tasks":null},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
-<p>This is the interactive parallel coordinate plot for all 10 abilities. We make it interactive such that we can move axis around and we can filter for particular section which easier to see the top abilities. However, since the dataset is too large, the lines overlap, so we need to select specific region to interpret the plot.</p>
+<p>This is the interactive parallel coordinate plot for all 10 best abilities. It facilitates a dynamic exploration of the data. We make it interactive such that we can move axis around and we can filter for particular section which easier to see the top abilities. However, since the dataset is too large, the lines overlap, so we need to select specific region to interpret the plot.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df[df<span class="sc">$</span>kills <span class="sc">&gt;</span> <span class="dv">16</span> <span class="sc">&amp;</span> df<span class="sc">$</span>kda <span class="sc">&gt;=</span> <span class="dv">10</span>,]</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>parcoords<span class="sc">::</span><span class="fu">parcoords</span>(<span class="at">data =</span> df, <span class="at">rownames =</span> <span class="cn">FALSE</span>, <span class="at">brushMode =</span> <span class="st">"1d-axes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df[df<span class="sc">$</span>kills <span class="sc">&gt;</span> <span class="dv">16</span> <span class="sc">&amp;</span> df<span class="sc">$</span>kda <span class="sc">&gt;=</span> <span class="dv">10</span>,]</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>parcoords<span class="sc">::</span><span class="fu">parcoords</span>(<span class="at">data =</span> df, <span class="at">rownames =</span> <span class="cn">FALSE</span>, <span class="at">brushMode =</span> <span class="st">"1d-axes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div class="parcoords html-widget html-fill-item-overflow-hidden html-fill-item" height="464px" id="htmlwidget-35a0dc01fd357b4635e6" style="width:100%;height:464px; position:relative; overflow-x:auto; overflow-y:hidden; max-width:100%;" width="100%"></div>
-<script type="application/json" data-for="htmlwidget-35a0dc01fd357b4635e6">{"x":{"data":{"names":["1009","2098","2390","2393","6197"],"total_gold":[40849,32981,44698,44698,26092],"kills":[17,18,18,18,17],"kda":[19,15.5,10.67,10.67,10.67],"total_xp":[45425,41839,45746,45746,35515]},"options":{"rownames":false,"brushMode":"1D-axes","brushPredicate":"AND","reorderable":false,"margin":{"top":50,"bottom":50,"left":100,"right":50},"mode":false,"bundlingStrength":0.5,"smoothness":0},"autoresize":false,"tasks":null},"evals":[],"jsHooks":[]}</script>
+<div class="parcoords html-widget html-fill-item-overflow-hidden html-fill-item" height="464px" id="htmlwidget-969e52aa702c58f98847" style="width:100%;height:464px; position:relative; overflow-x:auto; overflow-y:hidden; max-width:100%;" width="100%"></div>
+<script type="application/json" data-for="htmlwidget-969e52aa702c58f98847">{"x":{"data":{"names":["1009","2098","2390","2393","6197"],"total_gold":[40849,32981,44698,44698,26092],"kills":[17,18,18,18,17],"kda":[19,15.5,10.67,10.67,10.67],"total_xp":[45425,41839,45746,45746,35515]},"options":{"rownames":false,"brushMode":"1D-axes","brushPredicate":"AND","reorderable":false,"margin":{"top":50,"bottom":50,"left":100,"right":50},"mode":false,"bundlingStrength":0.5,"smoothness":0},"autoresize":false,"tasks":null},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
-<p>From the interactive parallel coordinate plot, I select a specific region where these abilities have relatively high values across all four variables, kills, gold, experiences points earned, and kda, and I filter the dataset based on that.</p>
+<p>In the interactive parallel coordinate plot, a specific region has been selected where certain abilities exhibit relatively high values across all four variables: kills, gold, experience points earned, and kda. The abilities contained in this region are provided in the dataframe below.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>df_ability <span class="ot">&lt;-</span> df_ability[df_ability<span class="sc">$</span>kills <span class="sc">&gt;</span> <span class="dv">16</span> <span class="sc">&amp;</span> df_ability<span class="sc">$</span>kda <span class="sc">&gt;=</span> <span class="dv">10</span>,]</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>df_ability</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df_ability <span class="ot">&lt;-</span> df_ability[df_ability<span class="sc">$</span>kills <span class="sc">&gt;</span> <span class="dv">16</span> <span class="sc">&amp;</span> df_ability<span class="sc">$</span>kda <span class="sc">&gt;=</span> <span class="dv">10</span>,]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df_ability</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>     total_gold kills   kda total_xp                   ability
@@ -432,7 +290,7 @@ Attaching package: 'dplyr'</code></pre>
 6197      26092    17 10.67    35515  necrolyte_reapers_scythe</code></pre>
 </div>
 </div>
-<p>From the data frame we can see two of the rows are from same ability. In total, I select 4 top abilities through these parallel coordinate plots, which are the following:<br>
+<p>From the data frame we can see two of the rows are from same ability. In total, we select 4 top abilities through these parallel coordinate plots, which are the following:<br>
 1. omniknight_martyr<br>
 2. winter_wyvern_arctic_burn<br>
 3. slark_shadow_dance<br>
@@ -441,78 +299,19 @@ Attaching package: 'dplyr'</code></pre>
 </section>
 <section id="do-these-four-good-abilities-function-better-on-radiant-or-dire" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="do-these-four-good-abilities-function-better-on-radiant-or-dire"><span class="header-section-number">3.3</span> Do these four good abilities function better on radiant or dire?</h2>
-<p>To answer the question, we decide to draw mosaic plot here because it can incorporate group size into account and can clearly show the relationship between multiple categorical variables, which are win (1 is win and 0 is lose), isRadient(True is radient and False is dire), and ability in our case.</p>
+<p>To answer the question, we decide to draw mosaic plot here because it can incorporate group size into account and offers a clear depiction of the relationships between multiple categorical variables, which are win (1 is win and 0 is lose), isRadient(True is radient and False is dire), and ability in our case.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>dota2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"addata.csv"</span>)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>df_2 <span class="ot">&lt;-</span> dota2[dota2<span class="sc">$</span>ability <span class="sc">==</span> <span class="st">"omniknight_martyr"</span> <span class="sc">|</span> dota2<span class="sc">$</span>ability <span class="sc">==</span> <span class="st">"slark_shadow_dance"</span> <span class="sc">|</span> dota2<span class="sc">$</span>ability <span class="sc">==</span> <span class="st">"winter_wyvern_arctic_burn"</span> <span class="sc">|</span> dota2<span class="sc">$</span>ability <span class="sc">==</span> <span class="st">"necrolyte_reapers_scythe"</span>,]</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>df_2[df_2 <span class="sc">==</span> <span class="st">"omniknight_martyr"</span>] <span class="ot">&lt;-</span> <span class="st">'o'</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>df_2[df_2 <span class="sc">==</span> <span class="st">"slark_shadow_dance"</span>] <span class="ot">&lt;-</span> <span class="st">'s'</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>df_2[df_2 <span class="sc">==</span> <span class="st">"winter_wyvern_arctic_burn"</span>] <span class="ot">&lt;-</span> <span class="st">'w'</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>df_2[df_2 <span class="sc">==</span> <span class="st">"necrolyte_reapers_scythe"</span>] <span class="ot">&lt;-</span> <span class="st">'n'</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>vcd<span class="sc">::</span><span class="fu">mosaic</span>(win<span class="sc">~</span>ability<span class="sc">+</span>isRadiant, <span class="at">data =</span> df_2, <span class="at">direction =</span> <span class="fu">c</span>(<span class="st">"v"</span>,<span class="st">"v"</span>,<span class="st">"h"</span>), <span class="at">main =</span> <span class="st">"Mosaic Plot of Wins on Abilities and Radiant/Dire"</span>, <span class="at">highlighting_fill=</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="st">"lightblue"</span>,<span class="st">"grey"</span>),)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output-display">
 <p><img src="results_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>In this mosaic plot, label ‘n’ represents the ability “necrolyte_reapers_scythe”; ‘o’ represents the ability “omniknight_martyr”; ‘s’ represents the ability “slark_shadow_dance”; ‘w’ represents the ability “winter_wyvern_arctic_burn”. These abbreviations make the plot clearer to read by avoiding label overlaps.<br>
-From the above mosaic plot, we can see for the three abilities “omniknight_martyr”, “slark_shadow_dance”, and “winter_wyvern_arctic_burn”, they perform significantly better on radiant, while for the ability “necrolyte_reapers_scythe”, it performs better on dire (not radiant). In our case, these four abilities function much better on radiant.</p>
+From the above mosaic plot, we can see for the three abilities “omniknight_martyr”, “slark_shadow_dance”, and “winter_wyvern_arctic_burn”, they perform significantly better on radiant, while for the ability “necrolyte_reapers_scythe”, it performs only slightly higher on radiant. In general, we can argue that these four abilities function much better on radiant instead of dire.</p>
 </section>
 <section id="what-heroes-are-most-commonly-associated-with-the-four-good-abilities" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="what-heroes-are-most-commonly-associated-with-the-four-good-abilities"><span class="header-section-number">3.4</span> What heroes are most commonly associated with the four good abilities?</h2>
-<p>This question can be answered by drawing the separate barplots for each ability. When people are assigned hero, these heroes are designed with a specific role in mind, so they have tendence to select correlated abilities. From the barplots we can know what heroes are highly correlated to the selection of each ability among all four.</p>
+<p>This question can be answered by drawing the separate barplots for each ability. When people are assigned hero, these heroes are designed with a specific role in mind, so they have tendence to select correlated abilities. The resulting visualizations offer a clear representation of the relationship between hero choices and the corresponding selection of specific abilities in the game.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>df_n <span class="ot">&lt;-</span> df_2[df_2<span class="sc">$</span>ability <span class="sc">==</span> <span class="st">"n"</span>,] </span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>df_n <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">table</span>(df_n<span class="sc">$</span>hero))</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df_n)[<span class="dv">1</span>] <span class="ot">=</span> <span class="st">'hero'</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>df_n<span class="sc">$</span>rank <span class="ot">=</span> <span class="fu">rank</span>(df_n<span class="sc">$</span>Freq)</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>df_n <span class="ot">&lt;-</span> df_n[<span class="fu">order</span>(df_n<span class="sc">$</span>rank,<span class="at">decreasing=</span><span class="cn">TRUE</span>),]</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>a <span class="ot">=</span> <span class="fu">ggplot</span>(df_n, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(hero,<span class="sc">-</span>Freq),<span class="at">y=</span>Freq))<span class="sc">+</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">color=</span><span class="st">'pink'</span>, <span class="at">fill =</span><span class="st">'lightpink'</span>, <span class="at">width=</span><span class="fl">0.8</span>)<span class="sc">+</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Count of Hero Associated with 'n'"</span>,<span class="at">x=</span><span class="st">"hero"</span>, <span class="at">y =</span> <span class="st">"Count"</span>)<span class="sc">+</span></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust=</span><span class="dv">1</span>, <span class="at">size =</span> <span class="dv">8</span>)) </span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>df_s <span class="ot">&lt;-</span> df_2[df_2<span class="sc">$</span>ability <span class="sc">==</span> <span class="st">"s"</span>,] </span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>df_s <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">table</span>(df_s<span class="sc">$</span>hero))</span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df_s)[<span class="dv">1</span>] <span class="ot">=</span> <span class="st">'hero'</span></span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>df_s<span class="sc">$</span>rank <span class="ot">=</span> <span class="fu">rank</span>(df_s<span class="sc">$</span>Freq)</span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>df_s <span class="ot">&lt;-</span> df_s[<span class="fu">order</span>(df_s<span class="sc">$</span>rank,<span class="at">decreasing=</span><span class="cn">TRUE</span>),]</span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>b <span class="ot">=</span> <span class="fu">ggplot</span>(df_s, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(hero,<span class="sc">-</span>Freq),<span class="at">y=</span>Freq))<span class="sc">+</span></span>
-<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">color=</span><span class="st">'pink'</span>, <span class="at">fill =</span><span class="st">'lightpink'</span>, <span class="at">width=</span><span class="fl">0.8</span>)<span class="sc">+</span></span>
-<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Count of Hero Associated with 's'"</span>,<span class="at">x=</span><span class="st">"hero"</span>, <span class="at">y =</span> <span class="st">"Count"</span>)<span class="sc">+</span></span>
-<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust=</span><span class="dv">1</span>, <span class="at">size =</span> <span class="dv">8</span>)) </span>
-<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>df_o <span class="ot">&lt;-</span> df_2[df_2<span class="sc">$</span>ability <span class="sc">==</span> <span class="st">"o"</span>,] </span>
-<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>df_o <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">table</span>(df_o<span class="sc">$</span>hero))</span>
-<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df_o)[<span class="dv">1</span>] <span class="ot">=</span> <span class="st">'hero'</span></span>
-<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>df_o<span class="sc">$</span>rank <span class="ot">=</span> <span class="fu">rank</span>(df_o<span class="sc">$</span>Freq)</span>
-<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>df_o <span class="ot">&lt;-</span> df_o[<span class="fu">order</span>(df_o<span class="sc">$</span>rank,<span class="at">decreasing=</span><span class="cn">TRUE</span>),]</span>
-<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>c <span class="ot">=</span> <span class="fu">ggplot</span>(df_o, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(hero,<span class="sc">-</span>Freq),<span class="at">y=</span>Freq))<span class="sc">+</span></span>
-<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">color=</span><span class="st">'pink'</span>, <span class="at">fill =</span><span class="st">'lightpink'</span>, <span class="at">width=</span><span class="fl">0.8</span>)<span class="sc">+</span></span>
-<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Count of Hero Associated with 'o'"</span>,<span class="at">x=</span><span class="st">"hero"</span>, <span class="at">y =</span> <span class="st">"Count"</span>)<span class="sc">+</span></span>
-<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust=</span><span class="dv">1</span>, <span class="at">size =</span> <span class="dv">8</span>)) </span>
-<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a>df_w <span class="ot">&lt;-</span> df_2[df_2<span class="sc">$</span>ability <span class="sc">==</span> <span class="st">"w"</span>,] </span>
-<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a>df_w <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">table</span>(df_w<span class="sc">$</span>hero))</span>
-<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df_w)[<span class="dv">1</span>] <span class="ot">=</span> <span class="st">'hero'</span></span>
-<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a>df_w<span class="sc">$</span>rank <span class="ot">=</span> <span class="fu">rank</span>(df_w<span class="sc">$</span>Freq)</span>
-<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a>df_w <span class="ot">&lt;-</span> df_w[<span class="fu">order</span>(df_w<span class="sc">$</span>rank,<span class="at">decreasing=</span><span class="cn">TRUE</span>),]</span>
-<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> <span class="fu">ggplot</span>(df_w, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(hero,<span class="sc">-</span>Freq),<span class="at">y=</span>Freq))<span class="sc">+</span></span>
-<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">color=</span><span class="st">'pink'</span>, <span class="at">fill =</span><span class="st">'lightpink'</span>, <span class="at">width=</span><span class="fl">0.8</span>)<span class="sc">+</span></span>
-<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"Count of Hero Associated with 'w'"</span>,<span class="at">x=</span><span class="st">"hero"</span>, <span class="at">y =</span> <span class="st">"Count"</span>)<span class="sc">+</span></span>
-<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust=</span><span class="dv">1</span>, <span class="at">size =</span> <span class="dv">8</span>)) </span>
-<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a><span class="fu">ggarrange</span>(a,b,c,d,<span class="at">common.legend =</span> <span class="cn">TRUE</span>, <span class="at">legend =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output-display">
 <p><img src="results_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -521,77 +320,18 @@ From the above mosaic plot, we can see for the three abilities “omniknight_mar
 </section>
 <section id="how-many-resources-are-consumed-by-these-four-abilities-compared-to-the-the-other-abilities" class="level2" data-number="3.5">
 <h2 data-number="3.5" class="anchored" data-anchor-id="how-many-resources-are-consumed-by-these-four-abilities-compared-to-the-the-other-abilities"><span class="header-section-number">3.5</span> How many resources are consumed by these four abilities compared to the the other abilities?</h2>
-<p>We want to draw histograms of continuous variable net worth faceted by all 10 abilities to see the distribution of net resources of each player possessing good abilities compared to rest of the abilities. In other words, this information gives us the total cost of choosing the four good abilities selected.</p>
+<p>We want to draw histograms of continuous variable net worth faceted by all 10 best abilities. By analyzing the histograms for each ability, we can gain a comprehensive understanding of the net worth distribution for players with the chosen top abilities, providing insights on the total cost associated with selecting these abilities in the game.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>saved_for_fourth[saved_for_fourth <span class="sc">==</span> <span class="st">"omniknight_martyr"</span>] <span class="ot">&lt;-</span> <span class="st">'o'</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>saved_for_fourth[saved_for_fourth <span class="sc">==</span> <span class="st">"slark_shadow_dance"</span>] <span class="ot">&lt;-</span> <span class="st">'s'</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>saved_for_fourth[saved_for_fourth <span class="sc">==</span> <span class="st">"winter_wyvern_arctic_burn"</span>] <span class="ot">&lt;-</span> <span class="st">'w'</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>saved_for_fourth[saved_for_fourth <span class="sc">==</span> <span class="st">"necrolyte_reapers_scythe"</span>] <span class="ot">&lt;-</span> <span class="st">'n'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(saved_for_fourth, <span class="fu">aes</span>(net_worth))<span class="sc">+</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">color =</span> <span class="st">'cornflowerblue'</span>, <span class="at">fill =</span> <span class="st">'lightblue'</span>, <span class="at">bins=</span><span class="dv">15</span>)<span class="sc">+</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>ability)<span class="sc">+</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Faceted Histogram of Net Worth"</span>)<span class="sc">+</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_grey</span>(<span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output-display">
 <p><img src="results_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>From these histograms, we can see that the abilities “necrolyte_reapers_scythe” and “slark_shadow_dance” use relatively limited amount of resources, while the abilities “omniknight_martyr” and “winter_wyvern_arctic_burn” use relatively large amount of resources, meaning that there’s higher cost selecting these abilities.</p>
+<p>From these histograms, we can see that the abilities “necrolyte_reapers_scythe” and “slark_shadow_dance” use relatively limited amount of resources, while the abilities “omniknight_martyr” and “winter_wyvern_arctic_burn” exhibit a tendency to utilize a comparatively larger amount of resources. This observation suggests that there is a discernible difference in the resource requirements among the selected abilities, so players also need to consider this during the ability selection phase.</p>
 </section>
 <section id="analysis-of-two-popular-abilities-based-on-various-metrics" class="level2" data-number="3.6">
 <h2 data-number="3.6" class="anchored" data-anchor-id="analysis-of-two-popular-abilities-based-on-various-metrics"><span class="header-section-number">3.6</span> Analysis of Two Popular Abilities Based on Various Metrics</h2>
 <p>We decide to do an additional analysis on two popular abilities (other than the abilities we’ve analyzed before) to see how they perform overall in the game, which can serve as an example to help player make a selection between two abilities when they have a hard time deciding which one to choose. We decide to create two scatterplot matrices to see how each perform under five metrics “kills”, “deaths”, “duration”, “hero_damage”, and “last_hits”.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>asdf <span class="ot">=</span> <span class="fu">filter</span>(dota2, ability <span class="sc">==</span> <span class="st">"tidehunter_anchor_smash"</span>)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>avg_values <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(dota2[, <span class="fu">c</span>(<span class="st">'kills'</span>,<span class="st">'deaths'</span>,<span class="st">'duration'</span>,<span class="st">'hero_damage'</span>,<span class="st">'last_hits'</span>)])</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>avg_values[<span class="st">'win'</span>] <span class="ot">=</span> <span class="fl">0.5</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>asdf <span class="ot">=</span> asdf[,<span class="fu">c</span>(<span class="st">'win'</span>, <span class="st">'kills'</span>,<span class="st">'deaths'</span>,<span class="st">'duration'</span>,<span class="st">'hero_damage'</span>,<span class="st">'last_hits'</span>)]</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>asdf <span class="ot">&lt;-</span> <span class="fu">rbind</span>(asdf, <span class="fu">as.data.frame</span>(<span class="fu">t</span>(avg_values)))</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>asdf <span class="ot">&lt;-</span> asdf <span class="sc">%&gt;%</span></span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="sc">-</span>win), as.numeric)</span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>asdf <span class="ot">&lt;-</span> asdf <span class="sc">%&gt;%</span></span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(win), as.character)</span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="co">#asdf &lt;- dplyr::select(asdf, kills, deaths, duration, hero_damage)</span></span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'indianred'</span>, <span class="st">'forestgreen'</span>, <span class="st">'navy'</span>)</span>
-<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">'Metrics for Anchor Smash Players'</span>,</span>
-<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>  asdf[<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>],</span>
-<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="fu">ifelse</span>(asdf<span class="sc">$</span>win <span class="sc">==</span> <span class="fl">0.5</span>, <span class="dv">15</span>, <span class="dv">16</span>),</span>
-<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="dv">1</span>,</span>
-<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">ifelse</span>(asdf<span class="sc">$</span>win <span class="sc">==</span> <span class="dv">0</span>,<span class="st">"indianred"</span>, </span>
-<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>                <span class="fu">ifelse</span>(asdf<span class="sc">$</span>win <span class="sc">==</span> <span class="fl">0.5</span>, <span class="st">"forestgreen"</span>, <span class="st">"navy"</span>))</span>
-<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">xpd =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
-<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>  .<span class="dv">2</span>, <span class="sc">-</span>.<span class="dv">02</span>,</span>
-<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">xpd =</span> <span class="st">'NA'</span>,</span>
-<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">'Win'</span>, <span class="st">'Loss'</span>, <span class="st">'Average for All Abilities'</span>),</span>
-<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"indianred"</span>,<span class="st">"navy"</span>, <span class="st">"forestgreen"</span>),</span>
-<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch=</span><span class="fu">c</span>(<span class="dv">16</span>,<span class="dv">16</span>,<span class="dv">15</span>),</span>
-<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">horiz =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> .<span class="dv">75</span>,</span>
-<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">"n"</span></span>
-<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in par(xpd = xpd): NAs introduced by coercion</code></pre>
 </div>
@@ -602,46 +342,6 @@ From the above mosaic plot, we can see for the three abilities “omniknight_mar
 <p>By comparing the various metrics, we can assess how having anchor smash affects a player’s game. In the plot of kills versus deaths, we can see that while players with anchor smash don’t necessarily die more often, their number of kills (particularly in losing games) is often below average. The duration of the matches appears relatively unaffected by anchor smash. But, if we look at the last_hits versus hero_damage plot, we can see that players with anchor smash are collecting more resources than average while doing less damage than average. This is really the nightmare scenario for an ability: requiring lots of resources and still being ineffective.</p>
 <p>In Dota 2, many abilities deal a set amount of damage. Anchor Smash, however, deals damage based on a hero’s damage statistic, which can be improved by items and levels. This chart shows us that anchor smash is an ineffective ability because players invest lots of resources into improving anchor smash, but fail to actually use it to get kills on enemy heroes.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>sddf <span class="ot">=</span> <span class="fu">filter</span>(dota2, ability <span class="sc">==</span> <span class="st">"slark_shadow_dance"</span>)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>avg_values <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(dota2[, <span class="fu">c</span>(<span class="st">'kills'</span>,<span class="st">'deaths'</span>,<span class="st">'duration'</span>,<span class="st">'hero_damage'</span>,<span class="st">'last_hits'</span>)])</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>avg_values[<span class="st">'win'</span>] <span class="ot">=</span> <span class="fl">0.5</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>sddf <span class="ot">=</span> sddf[,<span class="fu">c</span>(<span class="st">'win'</span>, <span class="st">'kills'</span>,<span class="st">'deaths'</span>,<span class="st">'duration'</span>,<span class="st">'hero_damage'</span>,<span class="st">'last_hits'</span>)]</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>sddf <span class="ot">&lt;-</span> <span class="fu">rbind</span>(sddf, <span class="fu">as.data.frame</span>(<span class="fu">t</span>(avg_values)))</span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>sddf <span class="ot">&lt;-</span> sddf <span class="sc">%&gt;%</span></span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="sc">-</span>win), as.numeric)</span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>sddf <span class="ot">&lt;-</span> sddf <span class="sc">%&gt;%</span></span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(win), as.character)</span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'indianred'</span>, <span class="st">'forestgreen'</span>, <span class="st">'navy'</span>)</span>
-<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
-<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">'Metrics for Shadow Dance Players'</span>,</span>
-<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>  sddf[<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>],</span>
-<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="fu">ifelse</span>(sddf<span class="sc">$</span>win <span class="sc">==</span> <span class="fl">0.5</span>, <span class="dv">15</span>, <span class="dv">16</span>),</span>
-<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="dv">1</span>,</span>
-<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">ifelse</span>(sddf<span class="sc">$</span>win <span class="sc">==</span> <span class="dv">0</span>,<span class="st">"indianred"</span>, </span>
-<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>                <span class="fu">ifelse</span>(sddf<span class="sc">$</span>win <span class="sc">==</span> <span class="fl">0.5</span>, <span class="st">"forestgreen"</span>, <span class="st">"navy"</span>))</span>
-<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">xpd =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(</span>
-<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>  .<span class="dv">2</span>, <span class="sc">-</span>.<span class="dv">02</span>,</span>
-<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">xpd =</span> <span class="st">'NA'</span>,</span>
-<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">'Win'</span>, <span class="st">'Loss'</span>, <span class="st">'Average for All Abilities'</span>),</span>
-<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"indianred"</span>,<span class="st">"navy"</span>, <span class="st">"forestgreen"</span>),</span>
-<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch=</span><span class="fu">c</span>(<span class="dv">16</span>,<span class="dv">16</span>,<span class="dv">15</span>),</span>
-<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">horiz =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> .<span class="dv">75</span>,</span>
-<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">bty =</span> <span class="st">"n"</span></span>
-<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in par(xpd = xpd): NAs introduced by coercion</code></pre>
 </div>
