@@ -242,6 +242,7 @@ From these histograms, we can see that the abilities "necrolyte_reapers_scythe" 
 
 We want to study intercorrelation between eair pair of continuous variables by using the scatterplot matrix which is useful to show all correlations at once. We use the original dataset instead of the modified one above to avoid any issue of bias.
 
+```{r}
 asdf = filter(dota2, ability == "tidehunter_anchor_smash")
 
 avg_values <- colMeans(dota2[, c('kills','deaths','duration','hero_damage','last_hits')])
