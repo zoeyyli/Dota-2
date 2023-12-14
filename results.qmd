@@ -51,6 +51,11 @@ ggplot(wlends, aes(x=reorder(ability,winrate),y=winrate))+
   coord_flip()
 ```
 
+```{r}
+#saved for d3 use
+df_d3 <- wlends[,c('ability','winrate')]
+```
+
 There are over 500 abilities in total, which is an extremely large pool. In order to answer the research questions, we need to select the abilities we would like to analyze. Before we discover which abilities are good or bad, we should make sure that we are working with a good sample size. To accomplish this, we will only consider abilities that appear in at least 30 matches. Then, we can calculate the total number of wins associated with each ability and determine the win rate by dividing by frequency. The results are plotted above. We can see Slark's "Shadow Dance" topping the chart with a 77.78% winrate, while Tidehunter's "Anchor Smash" is at 22.58% on the bottom. 
 
 ```{r}
