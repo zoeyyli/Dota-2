@@ -133,7 +133,6 @@ In total, I select 4 top abilities through these parallel coordinate plots, whic
 To answer the question, we decide to draw mosaic plot here because it can incorporate group size into account and can clearly show the relationship between multiple categorical variables, which are win (1 is win and 0 is lose), isRadient(True is radient and False is dire), and ability in our case.
 
 ```{r}
-
 dota2 <- read.csv("addata.csv")
 df_2 <- dota2[dota2$ability == "omniknight_martyr" | dota2$ability == "slark_shadow_dance" | dota2$ability == "winter_wyvern_arctic_burn" | dota2$ability == "necrolyte_reapers_scythe",]
 df_2[df_2 == "omniknight_martyr"] <- 'o'
@@ -197,6 +196,7 @@ d = ggplot(df_w, aes(x=reorder(hero,-Freq),y=Freq))+
   theme(axis.text.x = element_text(angle = 90, hjust=1, size = 8)) 
 
 ggarrange(a,b,c,d,common.legend = TRUE, legend = "bottom")
+
 ```
 
 From above barplots, we can see the heroes Lifeastealer and Nechrophos tends to be highly associated with the ability "necrolyte_reapers_scythe"; the hero Slark is highest correlated to the ability "slark_shadow_dance"; the hero Omniknight is highest correlated to the ability "omniknight_martyr"; the hero Winter Wyvern is highest correlated to the ability "winter_wyvern_arctic_burn". When people are randomly assigned these heroes, they are more likely to also select these four good abilities with a significant frequency difference compared to other heroes. 
@@ -210,12 +210,16 @@ saved_for_fourth[saved_for_fourth == "omniknight_martyr"] <- 'o'
 saved_for_fourth[saved_for_fourth == "slark_shadow_dance"] <- 's'
 saved_for_fourth[saved_for_fourth == "winter_wyvern_arctic_burn"] <- 'w'
 saved_for_fourth[saved_for_fourth == "necrolyte_reapers_scythe"] <- 'n'
+```
+
+```{r}
 ggplot(saved_for_fourth, aes(net_worth))+
   geom_histogram(color = 'cornflowerblue', fill = 'lightblue', bins=15)+
   facet_wrap(~ability)+
   labs("Faceted Histogram of Net Worth")+
   theme_grey(9)
 ```
+
 From these histograms, we can see that the abilities "necrolyte_reapers_scythe" and "slark_shadow_dance" use relatively limited amount of resources, while the abilities "omniknight_martyr" and "winter_wyvern_arctic_burn" use relatively large amount of resources, meaning that there's higher cost selecting these abilities. 
 
 ## Is there any inner correlation between the continuous variables we've studied above?
@@ -224,7 +228,6 @@ We want to study inner correlation between eair pair of continuous variables by 
 
 ```{r}
 dota2 = dota2[,c("total_gold","kills","kda","total_xp","net_worth")]
-
 asdf <- dplyr::select(dota2, total_gold, kills, kda, total_xp, net_worth)
 plot(asdf, pch = 16, cex = 0.3)
 ```
