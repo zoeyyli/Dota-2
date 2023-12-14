@@ -242,9 +242,106 @@ From these histograms, we can see that the abilities "necrolyte_reapers_scythe" 
 
 We want to study intercorrelation between eair pair of continuous variables by using the scatterplot matrix which is useful to show all correlations at once. We use the original dataset instead of the modified one above to avoid any issue of bias.
 
-```{r}
-dota2 = dota2[,c("total_gold","kills","kda","total_xp","net_worth")]
-asdf <- dplyr::select(dota2, total_gold, kills, kda, total_xp, net_worth)
-plot(asdf, pch = 16, cex = 0.3, main = 'Scatterplot Matrix for Dota2 Dataset')
+asdf = filter(dota2, ability == "tidehunter_anchor_smash")
+
+avg_values <- colMeans(dota2[, c('kills','deaths','duration','hero_damage','last_hits')])
+avg_values['win'] = 0.5
+
+asdf = asdf[,c('win', 'kills','deaths','duration','hero_damage','last_hits')]
+
+asdf <- rbind(asdf, as.data.frame(t(avg_values)))
+
+asdf <- asdf %>%
+  mutate_at(vars(-win), as.numeric)
+
+asdf <- asdf %>%
+  mutate_at(vars(win), as.character)
+
+#asdf <- dplyr::select(asdf, kills, deaths, duration, hero_damage)
+
+colors <- c('indianred', 'forestgreen', 'navy')
+plot(
+  main = 'Metrics for Anchor Smash Players',
+  asdf[2:6],
+  pch = ifelse(asdf$win == 0.5, 15, 16),
+  cex = 1,
+  col = ifelse(asdf$win == 0,"indianred", 
+                ifelse(asdf$win == 0.5, "forestgreen", "navy"))
+)
+
+par(xpd = TRUE)
+
+legend(
+  .2, -.02,
+  xpd = 'NA',
+  legend = c('Win', 'Loss', 'Average for All Abilities'),
+  col = c("indianred","navy", "forestgreen"),
+  pch=c(16,16,15),
+  horiz = TRUE,
+  cex = .75,
+  bty = "n"
+)
+
+
 ```
 We can see that most of these variables are pairwise positive linearly correlated except for "kda" related graphs. Multicollinearity can lead to less stable models, making predictions sensitive to changes in the dataset, which might be one of the limitation of our research. However, this also confirms with the parallel coordinate plot we drew above that kda can take widespread range of values disregarding other variables presented in the third row and third column in the scatterplot matrix. 
+
+By comparing the various metrics, we can assess how having anchor smash affects a player's game. In the plot of kills versus deaths, we can see that while players with anchor smash don't necessarily die more often, their number of kills (particularly in losing games) is often below average. The duration of the matches appears relatively unaffected by anchor smash. But, if we look at the last_hits versus hero_damage plot, we can see that players with anchor smash are collecting more resources than average while doing less damage than average. This is really the nightmare scenario for an ability: requiring lots of resources and still being ineffective.
+
+In Dota 2, many abilities deal a set amount of damage. Anchor Smash, however, deals damage based on a hero's damage statistic, which can be improved by items and levels. This chart shows us that anchor smash is an ineffective ability because players invest lots of resources into improving anchor smash, but fail to actually use it to get kills on enemy heroes. 
+
+
+```{r}
+
+
+sddf = filter(dota2, ability == "slark_shadow_dance")
+
+avg_values <- colMeans(dota2[, c('kills','deaths','duration','hero_damage','last_hits')])
+avg_values['win'] = 0.5
+
+sddf = sddf[,c('win', 'kills','deaths','duration','hero_damage','last_hits')]
+
+sddf <- rbind(sddf, as.data.frame(t(avg_values)))
+
+sddf <- sddf %>%
+  mutate_at(vars(-win), as.numeric)
+
+sddf <- sddf %>%
+  mutate_at(vars(win), as.character)
+
+colors <- c('indianred', 'forestgreen', 'navy')
+plot(
+  main = 'Metrics for Shadow Dance Players',
+  sddf[2:6],
+  pch = ifelse(sddf$win == 0.5, 15, 16),
+  cex = 1,
+  col = ifelse(sddf$win == 0,"indianred", 
+                ifelse(sddf$win == 0.5, "forestgreen", "navy"))
+)
+
+par(xpd = TRUE)
+
+legend(
+  .2, -.02,
+  xpd = 'NA',
+  legend = c('Win', 'Loss', 'Average for All Abilities'),
+  col = c("indianred","navy", "forestgreen"),
+  pch=c(16,16,15),
+  horiz = TRUE,
+  cex = .75,
+  bty = "n"
+)
+
+
+```
+In comparison, we can see how a player's game is affected by shadow dance. Looking at the kills versus deaths chart, we can see that especially in winning games, players with shadow dance have very few deaths. Shadow dance players also seem to have slightly below average kills, however, there are three outliers in winning games where the player has over a dozen kills and less than 5 deaths. This plot suggests that shadow dance makes a player more survivable. 
+
+While the average duration of shadow dance matches appears to align with the global average for abilities, there is a large range. In both very short and very long games, shadow dance yields the player a victory. Dota 2 players know that the game has dynamic game states depending on the current game time. This chart shows us that shadow dance is a strong spell both early, middle, and very late game. If shadow dance has any weakness, it is between the 2000 and 2500 mark, which is know as late game.
+
+In the plot of deaths versus duration, we can also see that there are several games past the 2500 mark where the player has fewer than 5 deaths, which is remarkable. In comparison, we can see the only two games that went very late for anchor smash both had 8 or more deaths. 
+
+Looking at hero_damage versus last_hits, we can see that the majority of shadow dance games are below average on last hits with relatively low hero damage, yet are still victories. There are a few points with very high last hit counts and high or medium damage. This chart again highlights the versatility of shadow dance: with shadow dance, a player can soak very few resources, but still manage to win a majority of games, or they take many resources, increase their damage, and win the game. Compared to anchor smash, shadow dance is more versatile and effective, allowing the player to adapt their game play while providing good impact to the team. 
+
+Unlike anchor smash, shadow dance is an ability that does not do any damage at all. Instead, it gives the player large amounts of healing, a period of near invincibility every minute, and alerts the player when the enemy team can see them. While anchor smash only has one use, shadow dance has many, and is a solid choice for any hero in the game. 
+
+
