@@ -51,35 +51,6 @@ There are over 500 abilities in total, which is an extremely large pool. In orde
 
 We can see Slark's "Shadow Dance" topping the chart with a 77.78% winrate, while Tidehunter's "Anchor Smash" is at 22.58% on the bottom. 
 
-```{r}
-#| fig-width: 10
-#| fig-height: 10
-
-dfh = as.data.frame(table(dota2$hero))
-names(dfh)[1] = 'hero'
-
-wlhdf <- dota2[,c("win", "hero")]
-
-wlhdf <- wlhdf %>%
-  filter(win == 1) %>%  # Consider only the rows where the round was won
-  group_by(hero) %>%
-  summarise(wins = n())
-
-wlhdf <- merge(wlhdf, dfh, by = "hero", all.x = TRUE)
-wlhdf$winrate <- wlhdf$wins / wlhdf$Freq
-wlhdf <- wlhdf[order(-wlhdf$winrate),]
-wlhends <- rbind(head(wlhdf, 10), tail(wlhdf, 10))
-
-ggplot(wlhends, aes(x=reorder(hero,winrate),y=winrate))+
-  geom_col(color='darkmagenta', fill ='darkmagenta', width=0.8)+
-  labs(title="The 10 Best and 10 Worst Heroes by Winrate", x="Ability", y = "Winrate")+
-  theme(
-    axis.text.x = element_text(angle = 90, size = 8),
-    plot.title = element_text(color = "black", face = "bold", hjust = 0.5)
-  ) +
-  coord_flip()
-
-```
 
 ```{r}
 df <- wlends
