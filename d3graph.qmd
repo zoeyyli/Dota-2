@@ -6,11 +6,45 @@
   }
 </style> 
 
-<div id="plot">
-</div>
 
-<button type = 'button' onlick = 'add()'>Add bar</button>
-<button type = 'button' onlick = 'remove()'>Remove bar</button>
+<p id="dota" style="background-color: silver; color: white;">
+   Do you know the game Dota2?</p>
+<input type="radio" name="dota_1" value="Yes">Yes</input>
+<input type="radio" name="dota_2" value="No">No</input>
+
+<div id="result"></div>
+<p id="dota" style="background-color: silver; color: white;">
+   Please select one ability below to see its win rate:</p>
+   
+<input type="radio" name="ability" value="Yes" id="A"> slark shadow dance</input><br>
+<input type="radio" name="ability" value="Yes" id="C"> disruptor thunder strike</input><br>
+<input type="radio" name="ability" value="Yes" id="F"> necrolyte_reapers_scythe</input><br>
+<input type="radio" name="ability" value="Yes" id="G"> phoenix_icarus_dive</input><br>
+<input type="radio" name="ability" value="Yes" id="H"> sniper_assassinate</input><br>
+<input type="radio" name="ability" value="Yes" id="D"> earthshaker aftershock</input><br>
+<input type="radio" name="ability" value="Yes" id="E"> windrunner_windrun</input><br>
+<input type="radio" name="ability" value="Yes" id="I"> omniknight_martyr</input><br>
+<input type="radio" name="ability" value="Yes" id="J"> tidehunter_anchor_smash</input><br>
+<input type="radio" name="ability" value="Yes" id="B"> beastmaster wild axes</input><br>
+
+<div id="plot"></div>
+<p></p>
+
+<p id="dota" style="background-color: silver; color: white;">
+   Please select one hero below to see its win rate:</p>
+
+<input type="radio" name="ability" value="Yes" id="1"> Mars</input><br>
+<input type="radio" name="ability" value="Yes" id="3"> Elder Titan</input><br>
+<input type="radio" name="ability" value="Yes" id="5"> Batrider</input><br>
+<input type="radio" name="ability" value="Yes" id="7"> Slark</input><br>
+<input type="radio" name="ability" value="Yes" id="4"> Lone Druid</input><br>
+<input type="radio" name="ability" value="Yes" id="8"> Zeus</input><br>
+<input type="radio" name="ability" value="Yes" id="9"> Broodmother</input><br>
+<input type="radio" name="ability" value="Yes" id="6"> Phantom Assassin</input><br>
+<input type="radio" name="ability" value="Yes" id="10"> Undying</input><br>
+<input type="radio" name="ability" value="Yes" id="2"> Bane</input><br>
+
+<div id="plot_2"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="scripts/myscript.js"></script>
