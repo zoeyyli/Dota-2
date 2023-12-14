@@ -105,7 +105,7 @@ Depending on the results of our exploration and analysis, we may choose to pursu
 
 
 ## Missing value analysis
-```{r}
+```{r, echo=FALSE, results=FALSE, message=FALSE}
 #| out-width: 100%
 #| echo: false
 #| fig-width: 10
@@ -234,7 +234,7 @@ Once we had curated the data frame, we wrote it into a CSV file. However, we rea
 
 The file in which we performed this preprocessing can be accessed here: [Link](/scripts/opendota.ipynb)
 
-```{r}
+```{r, echo=FALSE, results=FALSE, message=FALSE}
 #| out-width: 100%
 #| echo: false
 #| fig-width: 10

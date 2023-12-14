@@ -16,7 +16,7 @@ Before the data visualization, we will go over all the variables used below:
 - hero_damage (continuous variable): the amount of damage dealt specifically to enemy heroes by the player\
 - last_hits (continuous variable): the number of enemy creeps that a player's hero delivers the killing blow to
 
-```{r}
+```{r, echo=FALSE, results=FALSE, message=FALSE}
 library(GGally)
 library(dplyr)
 library(parcoords)
@@ -31,7 +31,7 @@ dota2 = dota2[ , colSums(is.na(dota2)) == 0]
 
 ## Good and Bad Abilities
 
-```{r}
+```{r, echo=FALSE, results=FALSE, message=FALSE}
 #| fig-width: 10
 #| fig-height: 10
 
@@ -53,6 +53,8 @@ wldf$winrate <- wldf$wins / wldf$Freq
 wldf <- wldf[order(-wldf$winrate),]
 wlends <- rbind(head(wldf, 10), tail(wldf, 10))
 
+wldt <- wldf[,c('ability', 'winrate')]
+
 wlends <- wlends %>%
   mutate(new_col = ifelse(row_number() <= 10, "Best Abilities", ifelse(row_number() > n() - 10, "Worst Abilities", NA)))
 
@@ -67,14 +69,14 @@ ggplot(wlends, aes(x=reorder(ability,winrate),y=winrate))+
   coord_flip()
 ```
 
-```{r}
+```{r, echo=FALSE, results=FALSE, message=FALSE}
 #saved for d3 use
 df_d3 <- wlends[,c('ability','winrate')]
 ```
 
 There are over 500 abilities in total, which is an extremely large pool. In order to answer the research questions, we need to select the abilities we would like to analyze. Before we discover which abilities are good or bad, we should make sure that we are working with a good sample size. To accomplish this, we will only consider abilities that appear in at least 30 matches. Then, we can calculate the total number of wins associated with each ability and determine the win rate by dividing by frequency. The results are plotted above. We can see Slark's "Shadow Dance" topping the chart with a 77.78% winrate, while Tidehunter's "Anchor Smash" is at 22.58% on the bottom. 
 
-```{r}
+```{r, echo=FALSE, results=FALSE, message=FALSE}
 dfh = as.data.frame(table(dota2$hero))
 names(dfh)[1] = 'hero'
 
@@ -106,7 +108,7 @@ ggplot(wlhends, aes(x=reorder(hero,winrate),y=winrate))+
 
 This is the barplots of 10 best heroes and 10 worst heroes selected from the original dataset based on their win rates. From this graph, we can see for what heroes tend to have higher win rate, which will also affect the effectiveness of the abilities chosen which will be further analyzed below. From the plots we can see the top heroes such as Mars and Bane have almost win rate of 0.8 which is really high. 
 
-```{r}
+```{r, echo=FALSE, results=FALSE, message=FALSE}
 df <- wlends
 df <- df[order(df$Freq,decreasing=TRUE),]
 df <- head(df,10)
@@ -118,26 +120,26 @@ dota2 <- dota2[dota2$ability %in% df$ability,]
 
 To answer the question, we decide to draw parallel coordinate plots which is useful when we want to get the abilities that top the charts in all four indicators. It's important to note that kda is a statistic that is used to measure a player's performance.
 
-```{r}
+```{r, echo=FALSE, results=FALSE, message=FALSE}
 df_ability <- dota2[,c("total_gold","kills","kda","total_xp", "ability")]
 GGally::ggparcoord(data = df_ability, columns = 1:4, alphaLines = .4, groupColumn = 5, splineFactor = TRUE, title = "Parallel Coordinates Plot")
 ```
 This is the parallel coordinate plot colored by abilities so that we can see the trend of lines of different colors. In general, the data values are compact with only one line colored pink with extremely high value of kda that belongs to the ability "slark_shadow_dance"(might be outlier).
 
-```{r}
+```{r, echo=FALSE, results=FALSE, message=FALSE}
 df <- dota2[,c("total_gold","kills","kda","total_xp")]
 parcoords::parcoords(data = df, rownames = FALSE, brushMode = "1d-axes")
 ```
 
 This is the interactive parallel coordinate plot for all 10 abilities. We make it interactive such that we can move axis around and we can filter for particular section which easier to see the top abilities. However, since the dataset is too large, the lines overlap, so we need to select specific region to interpret the plot. 
 
-```{r}
+```{r, echo=FALSE, results=FALSE, message=FALSE}
 df <- df[df$kills > 16 & df$kda >= 10,]
 parcoords::parcoords(data = df, rownames = FALSE, brushMode = "1d-axes")
 ```
 From the interactive parallel coordinate plot, I select a specific region where these abilities have relatively high values across all four variables, kills, gold, experiences points earned, and kda, and I filter the dataset based on that.
 
-```{r}
+```{r, echo=FALSE, results=FALSE, message=FALSE}
 df_ability <- df_ability[df_ability$kills > 16 & df_ability$kda >= 10,]
 df_ability
 ```
@@ -152,7 +154,7 @@ From the data frame we can see two of the rows are from same ability. In total, 
 
 To answer the question, we decide to draw mosaic plot here because it can incorporate group size into account and can clearly show the relationship between multiple categorical variables, which are win (1 is win and 0 is lose), isRadient(True is radient and False is dire), and ability in our case.
 
-```{r}
+```{r, echo=FALSE, results=FALSE, message=FALSE}
 dota2 <- read.csv("addata.csv")
 df_2 <- dota2[dota2$ability == "omniknight_martyr" | dota2$ability == "slark_shadow_dance" | dota2$ability == "winter_wyvern_arctic_burn" | dota2$ability == "necrolyte_reapers_scythe",]
 df_2[df_2 == "omniknight_martyr"] <- 'o'
@@ -170,7 +172,7 @@ From the above mosaic plot, we can see for the three abilities "omniknight_marty
 
 This question can be answered by drawing the separate barplots for each ability. When people are assigned hero, these heroes are designed with a specific role in mind, so they have tendence to select correlated abilities. From the barplots we can know what heroes are highly correlated to the selection of each ability among all four. 
 
-```{r}
+```{r, echo=FALSE, results=FALSE, message=FALSE}
 df_n <- df_2[df_2$ability == "n",] 
 df_n = as.data.frame(table(df_n$hero))
 names(df_n)[1] = 'hero'
@@ -225,14 +227,14 @@ From above barplots, we can see the heroes Lifeastealer and Nechrophos tends to 
 
 We want to draw histograms of continuous variable net worth faceted by all 10 abilities to see the distribution of net resources of each player possessing good abilities compared to rest of the abilities. In other words, this information gives us the total cost of choosing the four good abilities selected.
 
-```{r}
+```{r, echo=FALSE, results=FALSE, message=FALSE}
 saved_for_fourth[saved_for_fourth == "omniknight_martyr"] <- 'o'
 saved_for_fourth[saved_for_fourth == "slark_shadow_dance"] <- 's'
 saved_for_fourth[saved_for_fourth == "winter_wyvern_arctic_burn"] <- 'w'
 saved_for_fourth[saved_for_fourth == "necrolyte_reapers_scythe"] <- 'n'
 ```
 
-```{r}
+```{r, echo=FALSE, results=FALSE, message=FALSE}
 ggplot(saved_for_fourth, aes(net_worth))+
   geom_histogram(color = 'cornflowerblue', fill = 'lightblue', bins=15)+
   facet_wrap(~ability)+
@@ -246,7 +248,7 @@ From these histograms, we can see that the abilities "necrolyte_reapers_scythe" 
 
 We decide to do an additional analysis on two popular abilities (other than the abilities we've analyzed before) to see how they perform overall in the game, which can serve as an example to help player make a selection between two abilities when they have a hard time deciding which one to choose. We decide to create two scatterplot matrices to see how each perform under five metrics "kills", "deaths", "duration", "hero_damage", and "last_hits". 
 
-```{r}
+```{r, echo=FALSE, results=FALSE, message=FALSE}
 asdf = filter(dota2, ability == "tidehunter_anchor_smash")
 
 avg_values <- colMeans(dota2[, c('kills','deaths','duration','hero_damage','last_hits')])
@@ -293,7 +295,7 @@ By comparing the various metrics, we can assess how having anchor smash affects 
 
 In Dota 2, many abilities deal a set amount of damage. Anchor Smash, however, deals damage based on a hero's damage statistic, which can be improved by items and levels. This chart shows us that anchor smash is an ineffective ability because players invest lots of resources into improving anchor smash, but fail to actually use it to get kills on enemy heroes. 
 
-```{r}
+```{r, echo=FALSE, results=FALSE, message=FALSE}
 
 sddf = filter(dota2, ability == "slark_shadow_dance")
 
