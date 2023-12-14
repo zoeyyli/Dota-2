@@ -109,7 +109,6 @@ GGally::ggparcoord(data = df_ability, columns = 1:4, alphaLines = .4, groupColum
 This is the parallel coordinate plot colored by abilities so that we can see the trend of lines of different colors. In general, the data values are compact with only one line colored pink with extremely high value of kda that belongs to the ability "slark_shadow_dance"(might be outlier).
 
 ```{r}
-
 df <- dota2[,c("total_gold","kills","kda","total_xp")]
 parcoords::parcoords(data = df, rownames = FALSE, brushMode = "1d-axes")
 ```
@@ -127,7 +126,7 @@ df_ability <- df_ability[df_ability$kills > 16 & df_ability$kda >= 10,]
 df_ability
 ```
 
-In total, I select 4 top abilities through these parallel coordinate plots, which are the following:\
+From the data frame we can see two of the rows are from same ability. In total, I select 4 top abilities through these parallel coordinate plots, which are the following:\
 1. omniknight_martyr\
 2. winter_wyvern_arctic_burn\
 3. slark_shadow_dance\
@@ -145,7 +144,7 @@ df_2[df_2 == "slark_shadow_dance"] <- 's'
 df_2[df_2 == "winter_wyvern_arctic_burn"] <- 'w'
 df_2[df_2 == "necrolyte_reapers_scythe"] <- 'n'
 
-vcd::mosaic(win~ability+isRadiant, data = df_2, direction = c("v","v","h"), highlighting_fill= matrix(c("lightblue","grey"),)) 
+vcd::mosaic(win~ability+isRadiant, data = df_2, direction = c("v","v","h"), main = "Mosaic Plot of Wins on Abilities and Radiant/Dire", highlighting_fill= matrix(c("lightblue","grey"),)) 
 ```
 
 In this mosaic plot, label 'n' represents the ability "necrolyte_reapers_scythe"; 'o' represents the ability "omniknight_martyr"; 's' represents the ability "slark_shadow_dance"; 'w' represents the ability "winter_wyvern_arctic_burn". These abbreviations make the plot clearer to read by avoiding label overlaps.\
@@ -221,7 +220,7 @@ saved_for_fourth[saved_for_fourth == "necrolyte_reapers_scythe"] <- 'n'
 ggplot(saved_for_fourth, aes(net_worth))+
   geom_histogram(color = 'cornflowerblue', fill = 'lightblue', bins=15)+
   facet_wrap(~ability)+
-  labs("Faceted Histogram of Net Worth")+
+  ggtitle("Faceted Histogram of Net Worth")+
   theme_grey(9)
 ```
 
@@ -234,6 +233,6 @@ We want to study intercorrelation between eair pair of continuous variables by u
 ```{r}
 dota2 = dota2[,c("total_gold","kills","kda","total_xp","net_worth")]
 asdf <- dplyr::select(dota2, total_gold, kills, kda, total_xp, net_worth)
-plot(asdf, pch = 16, cex = 0.3)
+plot(asdf, pch = 16, cex = 0.3, main = 'Scatterplot Matrix for Dota2 Dataset')
 ```
 We can see that most of these variables are pairwise positive linearly correlated except for "kda" related graphs. Multicollinearity can lead to less stable models, making predictions sensitive to changes in the dataset, which might be one of the limitation of our research. However, this also confirms with the parallel coordinate plot we drew above that kda can take widespread range of values disregarding other variables presented in the third row and third column in the scatterplot matrix. 
